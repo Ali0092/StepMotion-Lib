@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StepMotionTheme {
-                StepMotion(modifier = Modifier.fillMaxSize().background(Color.White))
+                StepMotion(modifier = Modifier.background(Color.White))
             }
         }
     }
@@ -43,21 +45,30 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun StepMotion(modifier: Modifier = Modifier) {
-    Row(modifier = modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        StepperItem("1")
-        Spacer(modifier = Modifier.height(1.dp).weight(1f).background(Color.DarkGray))
-        StepperItem("2")
-        Spacer(modifier = Modifier.height(1.dp).weight(1f).background(Color.DarkGray))
-        StepperItem("3")
+    Row(modifier = modifier.fillMaxSize().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+        StepperItem("1", title = "Step 1")
+//        Spacer(modifier = Modifier.height(1.dp).weight(1f).background(Color.DarkGray))
+        StepperItem("2", title = "Step 2")
+//        Spacer(modifier = Modifier.height(1.dp).weight(1f).background(Color.DarkGray))
+//        StepperItem("3", title = "Step 3",true)
     }
 }
 
+
+//this item can be laterly triedn with canvas for more customizations etc
 @Composable
-fun StepperItem(text: String = "1") {
-    Card(modifier = Modifier.size(50.dp), shape = CircleShape, colors = CardDefaults.cardColors(containerColor = Color.DarkGray)) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Text(modifier = Modifier.align(Alignment.Center), text = text,color = Color.Black)
+fun StepperItem(text: String = "1", title: String = "Step 1",isLastItem: Boolean = false) {
+    Column(verticalArrangement = Arrangement.Center) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Card(modifier = Modifier.size(50.dp), shape = CircleShape, colors = CardDefaults.cardColors(containerColor = Color.DarkGray)) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(modifier = Modifier.align(Alignment.Center), text = text,color = Color.White)
+                }
+            }
+            if (!isLastItem) Spacer(modifier = Modifier.height(1.dp).width(100.dp).background(Color.DarkGray))
         }
+        Text( text = title,color = Color.Black)
     }
+
 
 }
