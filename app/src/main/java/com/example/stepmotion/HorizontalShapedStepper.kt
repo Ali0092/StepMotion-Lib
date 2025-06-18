@@ -1,8 +1,7 @@
 package com.example.stepmotion
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,15 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HorizontalSimpleStepper(
+fun HorizontalShapedStepper(
     modifier: Modifier = Modifier,
     countingList: List<Int> = listOf(1, 2, 3),
     textList: List<String> = listOf("Pending", "In Progress", "Successful"),
+    shape: Shape = CircleShape,
     selectedIndex: Int = 0,
     nonSelectedItemColor: Color = Color.Gray,
     selectedItemColor: Color = Color(0xff06a2c2),
@@ -41,8 +41,9 @@ fun HorizontalSimpleStepper(
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        StepperTopBar(
+        ShapedStepperTopBar(
             items = countingList,
+            shape = shape,
             selectedItemColor = selectedItemColor,
             nonSelectedItemColor = nonSelectedItemColor,
             selectedItemIndex = selectedIndex
@@ -57,9 +58,10 @@ fun HorizontalSimpleStepper(
 }
 
 @Composable
-fun StepperTopBar(
+fun ShapedStepperTopBar(
     modifier: Modifier = Modifier,
     items: List<Int>,
+    shape: Shape = CircleShape,
     selectedItemIndex: Int = 0,
     nonSelectedItemColor: Color = Color.LightGray,
     selectedItemColor: Color = Color.Blue,
@@ -71,17 +73,19 @@ fun StepperTopBar(
     ) {
         items.forEachIndexed { index, it ->
             if (index == items.lastIndex) {
-                TopStepperSingleItem(
+                TopShapedStepperSingleItem(
                     text = items[index].toString(),
                     isEndNode = true,
+                    shape = shape,
                     isSelected = selectedItemIndex >= index,
                     nonSelectedItemColor = nonSelectedItemColor,
                     selectedItemColor = selectedItemColor
                 )
             } else {
-                TopStepperSingleItem(
+                TopShapedStepperSingleItem(
                     modifier = Modifier.weight(1f),
                     text = items[index].toString(),
+                    shape = shape,
                     isSelected = selectedItemIndex >= index,
                     nonSelectedItemColor = nonSelectedItemColor,
                     selectedItemColor = selectedItemColor
@@ -93,9 +97,10 @@ fun StepperTopBar(
 }
 
 @Composable
-fun TopStepperSingleItem(
+fun TopShapedStepperSingleItem(
     modifier: Modifier = Modifier,
     text: String = "",
+    shape: Shape = CircleShape,
     isEndNode: Boolean = false,
     isSelected: Boolean = false,
     nonSelectedItemColor: Color = Color.LightGray,
@@ -106,31 +111,22 @@ fun TopStepperSingleItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.size(40.dp)
-                .border(
-                    width = 2.dp,
-                    color = if (isSelected) selectedItemColor else nonSelectedItemColor,
-                    shape = CircleShape
-                )
+        Card(
+            modifier = Modifier.size(40.dp),
+            shape = shape,
+            colors = CardDefaults.cardColors(containerColor = if (isSelected) selectedItemColor else Color.Transparent),
+            border = BorderStroke(width = 1.dp,color = if (isSelected) selectedItemColor else nonSelectedItemColor)
         ) {
-            Card(
-                modifier = Modifier.padding(6.dp),
-                shape = CircleShape,
-                colors = CardDefaults.cardColors(containerColor = if (isSelected) selectedItemColor else nonSelectedItemColor)
-            ) {
 
-                Box(Modifier.fillMaxSize()) {
-                    Text(
-                        text = text,
-                        modifier = Modifier.align(Alignment.Center),
-                        color = if(isSelected) Color.White else Color.Black,
-                        fontSize = 18.sp
-                    )
-                }
-
+            Box(Modifier.fillMaxSize()) {
+                Text(
+                    text = text,
+                    modifier = Modifier.align(Alignment.Center),
+                    color = if(isSelected) Color.White else Color.Black,
+                    fontSize = 18.sp
+                )
             }
+
         }
 
         if (!isEndNode) {
@@ -142,68 +138,6 @@ fun TopStepperSingleItem(
                         if (isSelected) selectedItemColor else nonSelectedItemColor
                     )
             )
-        }
-    }
-}
-
-@Composable
-fun StepperBottomBar(
-    modifier: Modifier = Modifier,
-    items: List<String>,
-    selectedItemIndex: Int = 0,
-    nonSelectedItemColor: Color = Color.LightGray,
-    selectedItemColor: Color = Color.Blue,
-
-    ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-    ) {
-        items.forEachIndexed { index, it ->
-            if (index == items.lastIndex) {
-                BottomStepperSingleItem(
-                    text = items[index].toString(),
-                    isEndNode = true,
-                    isSelected = selectedItemIndex >= index,
-                    nonSelectedItemColor = nonSelectedItemColor,
-                    selectedItemColor = selectedItemColor
-                )
-            } else {
-                BottomStepperSingleItem(
-                    modifier = Modifier.weight(1f),
-                    text = items[index].toString(),
-                    isSelected = selectedItemIndex >= index,
-                    nonSelectedItemColor = nonSelectedItemColor,
-                    selectedItemColor = selectedItemColor
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun BottomStepperSingleItem(
-    modifier: Modifier = Modifier,
-    text: String = "",
-    isEndNode: Boolean = false,
-    isSelected: Boolean = false,
-    nonSelectedItemColor: Color = Color.LightGray,
-    selectedItemColor: Color = Color.Blue,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = text,
-            color = if (isSelected) selectedItemColor else nonSelectedItemColor,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
-        if (!isEndNode) {
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
