@@ -12,7 +12,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StepMotionTheme {
-                HorizontalStepper()
+
+                HorizontalStepper(selectedItemIndex = 0)
             }
         }
     }
