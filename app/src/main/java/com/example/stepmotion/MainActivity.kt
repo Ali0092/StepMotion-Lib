@@ -1,6 +1,5 @@
 package com.example.stepmotion
 
-import android.R.attr.shape
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,8 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -30,18 +27,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StepMotionTheme {
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     var selectedIndex by remember { mutableIntStateOf(0) }
 
-                    HorizontalShapedStepper(
+                    HorizontalSimpleStepper(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 32.dp),
-                        shape = RoundedCornerShape(8.dp),
                         countingList = listOf(1, 2, 3),
-                        textList = listOf("Pending", "In Progress", "Successful"),
+                        titleList = listOf("Step1", "Step2", "Step3"),
                         selectedIndex = selectedIndex
                     )
 

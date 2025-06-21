@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 fun HorizontalShapedStepper(
     modifier: Modifier = Modifier,
     countingList: List<Int> = listOf(1, 2, 3),
-    textList: List<String> = listOf("Pending", "In Progress", "Successful"),
+    titleList: List<String> = listOf("Pending", "In Progress", "Successful"),
     shape: Shape = CircleShape,
     selectedIndex: Int = 0,
     nonSelectedItemColor: Color = Color.Gray,
@@ -49,10 +49,8 @@ fun HorizontalShapedStepper(
             selectedItemIndex = selectedIndex
         )
         StepperBottomBar(
-            items = textList,
-            selectedItemIndex = selectedIndex,
-            nonSelectedItemColor = Color.Black,
-            selectedItemColor = selectedItemColor)
+            titleList = titleList,
+        )
 
     }
 }
@@ -112,7 +110,7 @@ fun TopShapedStepperSingleItem(
         horizontalArrangement = Arrangement.Center
     ) {
         Card(
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(35.dp),
             shape = shape,
             colors = CardDefaults.cardColors(containerColor = if (isSelected) selectedItemColor else Color.Transparent),
             border = BorderStroke(width = 1.dp,color = if (isSelected) selectedItemColor else nonSelectedItemColor)

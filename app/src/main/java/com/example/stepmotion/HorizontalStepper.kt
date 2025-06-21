@@ -2,7 +2,6 @@ package com.example.stepmotion
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,7 @@ import androidx.compose.ui.unit.sp
 fun HorizontalSimpleStepper(
     modifier: Modifier = Modifier,
     countingList: List<Int> = listOf(1, 2, 3),
-    textList: List<String> = listOf("Pending", "In Progress", "Successful"),
+    titleList: List<String> = listOf("Pending", "In Progress", "Successful"),
     selectedIndex: Int = 0,
     nonSelectedItemColor: Color = Color.Gray,
     selectedItemColor: Color = Color(0xff06a2c2),
@@ -48,10 +47,8 @@ fun HorizontalSimpleStepper(
             selectedItemIndex = selectedIndex
         )
         StepperBottomBar(
-            items = textList,
-            selectedItemIndex = selectedIndex,
-            nonSelectedItemColor = Color.Black,
-            selectedItemColor = selectedItemColor)
+            titleList = titleList,
+        )
 
     }
 }
@@ -107,8 +104,8 @@ fun TopStepperSingleItem(
         horizontalArrangement = Arrangement.Center
     ) {
         Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.size(40.dp)
+            contentAlignment = Alignment.Center, modifier = Modifier
+                .size(40.dp)
                 .border(
                     width = 2.dp,
                     color = if (isSelected) selectedItemColor else nonSelectedItemColor,
@@ -125,7 +122,7 @@ fun TopStepperSingleItem(
                     Text(
                         text = text,
                         modifier = Modifier.align(Alignment.Center),
-                        color = if(isSelected) Color.White else Color.Black,
+                        color = if (isSelected) Color.White else Color.Black,
                         fontSize = 18.sp
                     )
                 }
@@ -149,33 +146,23 @@ fun TopStepperSingleItem(
 @Composable
 fun StepperBottomBar(
     modifier: Modifier = Modifier,
-    items: List<String>,
-    selectedItemIndex: Int = 0,
-    nonSelectedItemColor: Color = Color.LightGray,
-    selectedItemColor: Color = Color.Blue,
-
-    ) {
+    titleList: List<String>,
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
     ) {
-        items.forEachIndexed { index, it ->
-            if (index == items.lastIndex) {
+        titleList.forEachIndexed { index, it ->
+            if (index == titleList.lastIndex) {
                 BottomStepperSingleItem(
-                    text = items[index].toString(),
+                    title = titleList[index].toString(),
                     isEndNode = true,
-                    isSelected = selectedItemIndex >= index,
-                    nonSelectedItemColor = nonSelectedItemColor,
-                    selectedItemColor = selectedItemColor
                 )
             } else {
                 BottomStepperSingleItem(
                     modifier = Modifier.weight(1f),
-                    text = items[index].toString(),
-                    isSelected = selectedItemIndex >= index,
-                    nonSelectedItemColor = nonSelectedItemColor,
-                    selectedItemColor = selectedItemColor
+                    title = titleList[index].toString(),
                 )
             }
         }
@@ -185,11 +172,8 @@ fun StepperBottomBar(
 @Composable
 fun BottomStepperSingleItem(
     modifier: Modifier = Modifier,
-    text: String = "",
+    title: String = "",
     isEndNode: Boolean = false,
-    isSelected: Boolean = false,
-    nonSelectedItemColor: Color = Color.LightGray,
-    selectedItemColor: Color = Color.Blue,
 ) {
     Row(
         modifier = modifier,
@@ -197,9 +181,9 @@ fun BottomStepperSingleItem(
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = text,
-            color = if (isSelected) selectedItemColor else nonSelectedItemColor,
-            fontSize = 14.sp,
+            text = title,
+            color = Color.LightGray,
+            fontSize = 11.sp,
             fontWeight = FontWeight.Bold
         )
         if (!isEndNode) {
