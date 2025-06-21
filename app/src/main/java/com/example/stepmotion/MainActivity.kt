@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -38,11 +38,21 @@ class MainActivity : ComponentActivity() {
                             .fillMaxWidth()
                             .padding(top = 32.dp),
                         countingList = listOf(1, 2, 3),
-                        titleList = listOf("Step1", "Step2", "Step3"),
+                        titleList = listOf("Checking1", "Checking2", "Checking3"),
                         selectedIndex = selectedIndex
                     )
-
-                    Spacer(modifier = Modifier.weight(1f))
+                    VerticalSimpleStepper(
+                        modifier = Modifier.height(350.dp),
+                        countingList = listOf(1, 2, 3, 4, 5),
+                        titleList = listOf(
+                            "Steps in task workflow",
+                            "Steps in task workflow",
+                            "Steps in task workflow",
+                            "Steps in task workflow",
+                            "Steps in task workflow"
+                        ),
+                        selectedIndex = selectedIndex
+                    )
                     Button(
                         onClick = {
                             selectedIndex = (selectedIndex + 1) % 3
