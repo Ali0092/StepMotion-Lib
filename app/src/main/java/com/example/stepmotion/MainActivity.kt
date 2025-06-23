@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,36 +27,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            StepMotionTheme {
 
+            StepMotionTheme {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     var selectedIndex by remember { mutableIntStateOf(0) }
 
                     HorizontalSimpleStepper(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 32.dp),
-                        countingList = listOf(1, 2, 3),
-                        titleList = listOf("Checking1", "Checking2", "Checking3"),
-                        selectedIndex = selectedIndex
+                        modifier = Modifier.fillMaxWidth().padding(top = 32.dp),
+                        countingList = listOf(1, 2, 3,4,5),
+                        titleList = listOf("Checking1", "Checking2", "Checking3", "Checking4", "Checking5"),
+                        selectedItemIndex = selectedIndex,
+                        nonSelectedItemColor = Color.DarkGray,
+                        selectedItemColor = Color(0xff06a2c2),
+                        nonSelectedTitleColor = Color.DarkGray,
+                        selectedTitleColor = Color(0xff06a2c2)
                     )
-                    VerticalSimpleStepper(
-                        modifier = Modifier.height(350.dp),
-                        countingList = listOf(1, 2, 3, 4, 5),
-                        titleList = listOf(
-                            "Steps in task workflow",
-                            "Steps in task workflow",
-                            "Steps in task workflow",
-                            "Steps in task workflow",
-                            "Steps in task workflow"
-                        ),
-                        selectedIndex = selectedIndex
-                    )
+                    Spacer(modifier = Modifier.weight(1f))
                     Button(
                         onClick = {
-                            selectedIndex = (selectedIndex + 1) % 3
+                            selectedIndex = (selectedIndex + 1) % 5
                         }, modifier = Modifier.padding(vertical = 32.dp)
                     ) {
                         Text(

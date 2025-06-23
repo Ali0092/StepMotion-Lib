@@ -31,11 +31,13 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun VerticalSimpleStepper(
     modifier: Modifier = Modifier,
-    countingList: List<Int> = listOf(1, 2, 3),
-    titleList: List<String> = listOf("Pending", "In Progress", "Successful"),
-    selectedIndex: Int = 0,
-    nonSelectedItemColor: Color = Color.Gray,
-    selectedItemColor: Color = Color(0xff06a2c2),
+    countingList: List<Int>,
+    titleList: List<String>,
+    selectedIndex: Int,
+    nonSelectedItemColor: Color,
+    selectedItemColor: Color,
+    nonSelectedTitleColor: Color,
+    selectedTitleColor: Color,
 ) {
     Row(
         modifier
@@ -49,7 +51,10 @@ fun VerticalSimpleStepper(
             selectedItemIndex = selectedIndex
         )
         StepperRightBar(
-            titleList = titleList, selectedIndex = selectedIndex
+            titleList = titleList,
+            selectedIndex = selectedIndex,
+            nonSelectedTitleColor = nonSelectedTitleColor,
+            selectedTitleColor = selectedTitleColor
         )
     }
 }
@@ -100,10 +105,10 @@ fun StepperLeftBarSingleItem(
     isPrevious: Boolean = false,
     isCurrent: Boolean = false,
     isNext: Boolean = false,
-    nonSelectedItemColor: Color = Color.LightGray,
-    selectedItemColor: Color = Color.Blue,
+    nonSelectedItemColor: Color,
+    selectedItemColor: Color,
 ) {
-    val nonSelectedColor = selectedItemColor.copy(alpha = 0.5f)
+    val nonSelectedColor = selectedItemColor.copy(alpha = 0.3f)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -119,7 +124,7 @@ fun StepperLeftBarSingleItem(
                 )
         ) {
             Card(
-                modifier = Modifier.padding(if (isCurrent) 6.dp else 0.dp),
+                modifier = Modifier.padding(if (isCurrent) 4.dp else 0.dp),
                 shape = CircleShape,
                 colors = CardDefaults.cardColors(containerColor = if (isNext) nonSelectedColor else selectedItemColor)
             ) {
@@ -166,6 +171,8 @@ fun StepperRightBar(
     modifier: Modifier = Modifier,
     titleList: List<String>,
     selectedIndex: Int = 0,
+    nonSelectedTitleColor: Color,
+    selectedTitleColor: Color,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -175,13 +182,17 @@ fun StepperRightBar(
                 StepperRightBarSingleItem(
                     title = titleList[index].toString(),
                     isEndNode = true,
-                    isCurrent = index <= selectedIndex
+                    isCurrent = index <= selectedIndex,
+                    nonSelectedTitleColor = nonSelectedTitleColor,
+                    selectedTitleColor = selectedTitleColor
                 )
             } else {
                 StepperRightBarSingleItem(
                     modifier = Modifier.weight(1f),
                     title = titleList[index].toString(),
-                    isCurrent = index <= selectedIndex
+                    isCurrent = index <= selectedIndex,
+                    nonSelectedTitleColor = nonSelectedTitleColor,
+                    selectedTitleColor = selectedTitleColor
                 )
             }
         }
@@ -194,11 +205,13 @@ fun StepperRightBarSingleItem(
     title: String = "",
     isCurrent: Boolean = false,
     isEndNode: Boolean = false,
+    nonSelectedTitleColor: Color,
+    selectedTitleColor: Color,
 ) {
     Column(modifier = modifier) {
         Text(
             text = title,
-            color = if (isCurrent) Color(0xff06a2c2) else Color.DarkGray,
+            color = if (isCurrent) selectedTitleColor else nonSelectedTitleColor,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )

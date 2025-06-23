@@ -1,6 +1,5 @@
 package com.example.stepmotion
 
-import android.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,28 +31,33 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HorizontalSimpleStepper(
     modifier: Modifier = Modifier,
-    countingList: List<Int> = listOf(1, 2, 3),
-    titleList: List<String> = listOf("Pending", "In Progress", "Successful"),
-    selectedIndex: Int = 0,
-    nonSelectedItemColor: Color = Color.Gray,
-    selectedItemColor: Color = Color(0xff06a2c2),
+    countingList: List<Int>,
+    titleList: List<String>,
+    selectedItemIndex: Int ,
+    nonSelectedItemColor: Color ,
+    selectedItemColor: Color,
+    nonSelectedTitleColor: Color,
+    selectedTitleColor: Color
 ) {
 
     Column(
         modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         StepperTopBar(
             items = countingList,
             selectedItemColor = selectedItemColor,
             nonSelectedItemColor = nonSelectedItemColor,
-            selectedItemIndex = selectedIndex
+            selectedItemIndex = selectedItemIndex
         )
+        Spacer(modifier = Modifier.height(4.dp))
         StepperBottomBar(
             titleList = titleList,
-            selectedIndex = selectedIndex
+            selectedIndex = selectedItemIndex,
+            nonSelectedTitleColor = nonSelectedTitleColor,
+            selectedTitleColor = selectedTitleColor
         )
 
     }
@@ -70,7 +74,6 @@ fun StepperTopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
     ) {
         items.forEachIndexed { index, it ->
             if (index == items.lastIndex) {
@@ -110,7 +113,7 @@ fun TopStepperSingleItem(
     nonSelectedItemColor: Color = Color.LightGray,
     selectedItemColor: Color = Color.Blue,
 ) {
-    val nonSelectedColor = selectedItemColor.copy(alpha = 0.5f)
+    val nonSelectedColor = selectedItemColor.copy(alpha = 0.3f)
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -126,7 +129,7 @@ fun TopStepperSingleItem(
                 )
         ) {
             Card(
-                modifier = Modifier.padding(if(isCurrent) 6.dp else 0.dp),
+                modifier = Modifier.padding(if(isCurrent) 4.dp else 0.dp),
                 shape = CircleShape,
                 colors = CardDefaults.cardColors(containerColor = if (isNext) nonSelectedColor else selectedItemColor)
             ) {
@@ -173,24 +176,28 @@ fun StepperBottomBar(
     modifier: Modifier = Modifier,
     titleList: List<String>,
     selectedIndex: Int = 0,
+    nonSelectedTitleColor: Color,
+    selectedTitleColor : Color
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
         titleList.forEachIndexed { index, it ->
             if (index == titleList.lastIndex) {
                 BottomStepperSingleItem(
                     title = titleList[index].toString(),
                     isEndNode = true,
-                    isCurrent =  index <= selectedIndex
+                    isCurrent =  index <= selectedIndex,
+                    nonSelectedItemColor = nonSelectedTitleColor,
+                    selectedTitleColor = selectedTitleColor
                 )
             } else {
                 BottomStepperSingleItem(
                     modifier = Modifier.weight(1f),
                     title = titleList[index].toString(),
-                    isCurrent =  index <= selectedIndex
+                    isCurrent =  index <= selectedIndex,
+                    nonSelectedItemColor = nonSelectedTitleColor,
+                    selectedTitleColor = selectedTitleColor
                 )
             }
         }
@@ -203,6 +210,8 @@ fun BottomStepperSingleItem(
     title: String = "",
     isCurrent: Boolean = false,
     isEndNode: Boolean = false,
+    nonSelectedItemColor: Color,
+    selectedTitleColor : Color
 ) {
     Row(
         modifier = modifier,
@@ -211,7 +220,7 @@ fun BottomStepperSingleItem(
     ) {
         Text(
             text = title,
-            color = if (isCurrent) Color(0xff06a2c2) else  Color.DarkGray,
+            color = if (isCurrent) selectedTitleColor else nonSelectedItemColor,
             fontSize = 13.sp,
             fontWeight = FontWeight.Bold
         )
