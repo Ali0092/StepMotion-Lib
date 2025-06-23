@@ -1,21 +1,21 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
 
+group = "com.github.ali0092"
+version = "1.0.0"
+
 android {
-    namespace = "com.example.stepmotion"
+    namespace = "com.example.stepmotionlib"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.stepmotion"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -34,25 +34,28 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
-        compose = true
+        compose  =true
     }
+
+
 }
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+
+    // Use BOM for consistent Compose versions
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation(project(":stepmotionlib"))
 
 }

@@ -1,4 +1,4 @@
-package com.example.stepmotion
+package com.example.stepmotionlib
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

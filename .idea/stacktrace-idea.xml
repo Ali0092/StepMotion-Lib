@@ -8,11 +8,16 @@
         <option value="$PROJECT_DIR$/app/src/main/java" />
         <option value="$PROJECT_DIR$/app/src/main/res" />
         <option value="$PROJECT_DIR$/app/src/test/java" />
+        <option value="$PROJECT_DIR$/stepmotionlib/build/generated/res/resValues/debug" />
+        <option value="$PROJECT_DIR$/stepmotionlib/src/androidTest/java" />
+        <option value="$PROJECT_DIR$/stepmotionlib/src/main/java" />
+        <option value="$PROJECT_DIR$/stepmotionlib/src/test/java" />
       </set>
     </option>
     <option name="packages">
       <set>
         <option value="com.example.stepmotion" />
+        <option value="com.example.stepmotionlib" />
       </set>
     </option>
   </component>
