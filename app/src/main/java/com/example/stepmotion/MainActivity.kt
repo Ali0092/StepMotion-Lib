@@ -4,12 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.stepmotion.ui.theme.StepMotionTheme
@@ -30,21 +35,33 @@ class MainActivity : ComponentActivity() {
 
             StepMotionTheme {
                 Column(
+                    modifier = Modifier.background(Color(0xFF99FCE7)),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     var selectedIndex by remember { mutableIntStateOf(0) }
 
                     HorizontalSimpleStepper(
-                        modifier = Modifier.fillMaxWidth().padding(top = 32.dp),
-                        countingList = listOf(1, 2, 3,4,5),
-                        titleList = listOf("Checking1", "Checking2", "Checking3", "Checking4", "Checking5"),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 32.dp),
+                        countingList = listOf(1, 2, 3, 4, 5),
+                        titleList = listOf(
+                            "Checking1",
+                            "Checking2",
+                            "Checking3",
+                            "Checking4",
+                            "Checking5"
+                        ),
                         selectedItemIndex = selectedIndex,
                         nonSelectedItemColor = Color.DarkGray,
                         selectedItemColor = Color(0xff06a2c2),
                         nonSelectedTitleColor = Color.DarkGray,
                         selectedTitleColor = Color(0xff06a2c2)
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    PersonalInfoForm(
+                        modifier = Modifier.weight(1f),
+                        screenNum = selectedIndex.toString()
+                    )
                     Button(
                         onClick = {
                             selectedIndex = (selectedIndex + 1) % 5
@@ -57,5 +74,19 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun PersonalInfoForm(modifier: Modifier = Modifier, screenNum: String) {
+    Column(modifier = modifier) {
+        Text("Enter your name: ${screenNum}", fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(8.dp))
+        TextField(value = "", onValueChange = {}, placeholder = { Text("John Doe") })
+
+        Spacer(Modifier.height(16.dp))
+        Text("Email Address:", fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(8.dp))
+        TextField(value = "", onValueChange = {}, placeholder = { Text("example@email.com") })
     }
 }
