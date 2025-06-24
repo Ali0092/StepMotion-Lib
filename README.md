@@ -1,4 +1,5 @@
 # 🚀 StepMotion
+[![](https://jitpack.io/v/Ali0092/StepMotion-Lib.svg)](https://jitpack.io/#Ali0092/StepMotion-Lib)
 
 **StepMotion** is a lightweight, customizable, and elegant stepper UI library for Jetpack Compose. It helps you display multi-step progress in a clean and intuitive way — perfect for forms, onboarding flows, order tracking, and more.
 
@@ -23,11 +24,22 @@
 
 ## 🛠️ Installation
 
-Coming soon to **MavenCentral** or **JitPack**\
-For now, copy the code into your project and import the composables from:
+Add JitPack to your root `build.gradle`:
 
-```kotlin
-import com.example.stepmotionlib.*
+```gradle
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Then, add the dependency in your module's `build.gradle`:
+
+```gradle
+dependencies {
+    implementation 'com.github.Ali0092:StepMotion-Lib:v1.0.2'
+}
 ```
 
 ---
