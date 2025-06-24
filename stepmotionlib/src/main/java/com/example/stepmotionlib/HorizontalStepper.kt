@@ -121,7 +121,7 @@ fun TopStepperSingleItem(
     ) {
         Box(
             contentAlignment = Alignment.Center, modifier = Modifier
-                .size(35.dp)
+                .size(32.dp)
                 .border(
                     width = if (isCurrent) 2.dp else 0.dp,
                     color =  if (isCurrent) selectedItemColor else Color.Transparent,

@@ -33,7 +33,7 @@ fun VerticalSimpleStepper(
     modifier: Modifier = Modifier,
     countingList: List<Int>,
     titleList: List<String>,
-    selectedIndex: Int,
+    selectedItemIndex: Int,
     nonSelectedItemColor: Color,
     selectedItemColor: Color,
     nonSelectedTitleColor: Color,
@@ -48,11 +48,11 @@ fun VerticalSimpleStepper(
             items = countingList,
             selectedItemColor = selectedItemColor,
             nonSelectedItemColor = nonSelectedItemColor,
-            selectedItemIndex = selectedIndex
+            selectedItemIndex = selectedItemIndex
         )
         StepperRightBar(
             titleList = titleList,
-            selectedIndex = selectedIndex,
+            selectedIndex = selectedItemIndex,
             nonSelectedTitleColor = nonSelectedTitleColor,
             selectedTitleColor = selectedTitleColor
         )
@@ -116,7 +116,7 @@ fun StepperLeftBarSingleItem(
     ) {
         Box(
             contentAlignment = Alignment.Center, modifier = Modifier
-                .size(35.dp)
+                .size(32.dp)
                 .border(
                     width = if (isCurrent) 2.dp else 0.dp,
                     color = if (isCurrent) selectedItemColor else Color.Transparent,
@@ -175,7 +175,7 @@ fun StepperRightBar(
     selectedTitleColor: Color,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
     ) {
         titleList.forEachIndexed { index, it ->
             if (index == titleList.lastIndex) {
@@ -208,12 +208,12 @@ fun StepperRightBarSingleItem(
     nonSelectedTitleColor: Color,
     selectedTitleColor: Color,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         Text(
             text = title,
             color = if (isCurrent) selectedTitleColor else nonSelectedTitleColor,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         if (!isEndNode) {
             Spacer(modifier = Modifier.weight(1f))
