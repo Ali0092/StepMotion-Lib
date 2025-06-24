@@ -39,7 +39,7 @@ Then, add the dependency in your module's `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation 'com.github.Ali0092:StepMotion-Lib:v1.0.2'
+    implementation 'com.github.Ali0092:StepMotion-Lib:v1.0.3'
 }
 ```
 
