@@ -53,6 +53,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(project(":stepmotionlib"))
+    implementation("com.github.Ali0092:StepMotion-Lib:v1.0.1")
+
 
 }
