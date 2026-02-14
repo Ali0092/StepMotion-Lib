@@ -1,7 +1,19 @@
 package com.example.stepmotionlib
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,10 +32,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,8 +49,8 @@ fun HorizontalSimpleStepper(
     modifier: Modifier = Modifier,
     countingList: List<Int>,
     titleList: List<String>,
-    selectedItemIndex: Int ,
-    nonSelectedItemColor: Color ,
+    selectedItemIndex: Int,
+    nonSelectedItemColor: Color,
     selectedItemColor: Color,
     nonSelectedTitleColor: Color,
     selectedTitleColor: Color
@@ -42,8 +58,7 @@ fun HorizontalSimpleStepper(
 
     Column(
         modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         StepperTopBar(
@@ -75,7 +90,7 @@ fun StepperTopBar(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        items.forEachIndexed { index, it ->
+        items.forEachIndexed { index, _ ->
             if (index == items.lastIndex) {
                 TopStepperSingleItem(
                     text = items[index].toString(),
@@ -114,6 +129,50 @@ fun TopStepperSingleItem(
     selectedItemColor: Color = Color.Blue,
 ) {
     val nonSelectedColor = selectedItemColor.copy(alpha = 0.3f)
+
+    val containerColor by animateColorAsState(
+        targetValue = if (isNext) nonSelectedColor else selectedItemColor,
+        animationSpec = tween(400),
+        label = "containerColor"
+    )
+
+    val borderWidth by animateDpAsState(
+        targetValue = if (isCurrent) 2.dp else 0.dp,
+        animationSpec = tween(300),
+        label = "borderWidth"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (isCurrent) selectedItemColor else Color.Transparent,
+        animationSpec = tween(300),
+        label = "borderColor"
+    )
+
+    val indicatorScale by animateFloatAsState(
+        targetValue = if (isCurrent) 1.1f else 1.0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessMediumLow
+        ),
+        label = "indicatorScale"
+    )
+
+    val innerPadding by animateDpAsState(
+        targetValue = if (isCurrent) 4.dp else 0.dp,
+        animationSpec = tween(300),
+        label = "innerPadding"
+    )
+
+    // Connector line animation
+    val connectorFill by animateFloatAsState(
+        targetValue = if (isCurrent || isPrevious) 1f else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "connectorFill"
+    )
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -122,31 +181,38 @@ fun TopStepperSingleItem(
         Box(
             contentAlignment = Alignment.Center, modifier = Modifier
                 .size(32.dp)
+                .scale(indicatorScale)
                 .border(
-                    width = if (isCurrent) 2.dp else 0.dp,
-                    color =  if (isCurrent) selectedItemColor else Color.Transparent,
+                    width = borderWidth,
+                    color = borderColor,
                     shape = CircleShape
                 )
         ) {
             Card(
-                modifier = Modifier.padding(if(isCurrent) 4.dp else 0.dp),
+                modifier = Modifier.padding(innerPadding),
                 shape = CircleShape,
-                colors = CardDefaults.cardColors(containerColor = if (isNext) nonSelectedColor else selectedItemColor)
+                colors = CardDefaults.cardColors(containerColor = containerColor)
             ) {
 
                 Box(Modifier.fillMaxSize()) {
-                    if (isPrevious) {
-                        Image(
-                            modifier = Modifier.align(Alignment.Center),
-                            imageVector = Icons.Rounded.Check,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
-                    } else {
-                        if (isCurrent || isNext) {
+                    AnimatedContent(
+                        targetState = isPrevious,
+                        modifier = Modifier.align(Alignment.Center),
+                        transitionSpec = {
+                            (fadeIn(tween(300)) + scaleIn(tween(300)))
+                                .togetherWith(fadeOut(tween(300)) + scaleOut(tween(300)))
+                        },
+                        label = "stepContent"
+                    ) { showCheck ->
+                        if (showCheck) {
+                            Image(
+                                imageVector = Icons.Rounded.Check,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(Color.White)
+                            )
+                        } else {
                             Text(
                                 text = text,
-                                modifier = Modifier.align(Alignment.Center),
                                 color = Color.White,
                                 fontSize = 18.sp
                             )
@@ -158,15 +224,32 @@ fun TopStepperSingleItem(
         }
 
         if (!isEndNode) {
-            Spacer(
+            Canvas(
                 modifier = Modifier
                     .padding(horizontal = 4.dp)
                     .weight(1f)
                     .height(2.dp)
-                    .background(
-                        if (isCurrent || isPrevious) selectedItemColor else nonSelectedItemColor
+            ) {
+                val lineY = size.height / 2
+                // Inactive background
+                drawLine(
+                    color = nonSelectedItemColor,
+                    start = Offset(0f, lineY),
+                    end = Offset(size.width, lineY),
+                    strokeWidth = size.height,
+                    cap = StrokeCap.Round,
+                )
+                // Animated active fill
+                if (connectorFill > 0f) {
+                    drawLine(
+                        color = selectedItemColor,
+                        start = Offset(0f, lineY),
+                        end = Offset(size.width * connectorFill, lineY),
+                        strokeWidth = size.height,
+                        cap = StrokeCap.Round,
                     )
-            )
+                }
+            }
         }
     }
 }
@@ -177,17 +260,17 @@ fun StepperBottomBar(
     titleList: List<String>,
     selectedIndex: Int = 0,
     nonSelectedTitleColor: Color,
-    selectedTitleColor : Color
+    selectedTitleColor: Color
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
     ) {
-        titleList.forEachIndexed { index, it ->
+        titleList.forEachIndexed { index, _ ->
             if (index == titleList.lastIndex) {
                 BottomStepperSingleItem(
                     title = titleList[index].toString(),
                     isEndNode = true,
-                    isCurrent =  index <= selectedIndex,
+                    isCurrent = index <= selectedIndex,
                     nonSelectedItemColor = nonSelectedTitleColor,
                     selectedTitleColor = selectedTitleColor
                 )
@@ -195,7 +278,7 @@ fun StepperBottomBar(
                 BottomStepperSingleItem(
                     modifier = Modifier.weight(1f),
                     title = titleList[index].toString(),
-                    isCurrent =  index <= selectedIndex,
+                    isCurrent = index <= selectedIndex,
                     nonSelectedItemColor = nonSelectedTitleColor,
                     selectedTitleColor = selectedTitleColor
                 )
@@ -211,8 +294,14 @@ fun BottomStepperSingleItem(
     isCurrent: Boolean = false,
     isEndNode: Boolean = false,
     nonSelectedItemColor: Color,
-    selectedTitleColor : Color
+    selectedTitleColor: Color
 ) {
+    val titleColor by animateColorAsState(
+        targetValue = if (isCurrent) selectedTitleColor else nonSelectedItemColor,
+        animationSpec = tween(400),
+        label = "titleColor"
+    )
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -220,7 +309,7 @@ fun BottomStepperSingleItem(
     ) {
         Text(
             text = title,
-            color = if (isCurrent) selectedTitleColor else nonSelectedItemColor,
+            color = titleColor,
             fontSize = 13.sp,
             fontWeight = FontWeight.Bold
         )

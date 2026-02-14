@@ -43,11 +43,7 @@ class MainActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(Color(0xFFDEDEDE), Color(0xFFA8AABC))
-                            )
-                        )
+                        .background(Color.White)
                         .verticalScroll(rememberScrollState())
                         .padding(top = 48.dp, bottom = 32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -143,8 +139,9 @@ class MainActivity : ComponentActivity() {
                             ),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFF8B5CF6),
-                            inactiveColor = Color.Gray,
-                            cardBackgroundColor = Color.White,
+                            inactiveColor = Color.DarkGray,
+                            inActiveBackgroundColor = Color(0xFFFAFAFA),
+                            cardBackgroundColor = Color(0xFFD3D3D3),
                         )
                     }
                 }

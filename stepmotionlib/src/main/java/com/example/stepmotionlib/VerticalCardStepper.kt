@@ -15,6 +15,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -55,12 +56,12 @@ fun VerticalCardStepper(
     currentStep: Int,
     activeColor: Color,
     inactiveColor: Color,
+    inActiveBackgroundColor: Color,
     cardBackgroundColor: Color,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         steps.forEachIndexed { index, title ->
             val isCompleted = index < currentStep
@@ -106,6 +107,7 @@ fun VerticalCardStepper(
                     isCurrent = isCurrent,
                     activeColor = activeColor,
                     inactiveColor = inactiveColor,
+                    inActiveBackgroundColor = inActiveBackgroundColor,
                     cardBackgroundColor = cardBackgroundColor,
                     modifier = Modifier
                         .weight(1f)
@@ -216,18 +218,19 @@ private fun StepCard(
     isCurrent: Boolean,
     activeColor: Color,
     inactiveColor: Color,
+    inActiveBackgroundColor: Color,
     cardBackgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val elevation by animateDpAsState(
-        targetValue = if (isCurrent) 4.dp else 0.dp,
+        targetValue = if (isCurrent) 2.dp else 0.dp,
         animationSpec = tween(400),
         label = "cardElevation"
     )
 
     val cardBg by animateColorAsState(
         targetValue = when {
-            isCurrent -> activeColor.copy(alpha = 0.06f)
+            isCurrent -> inActiveBackgroundColor
             else -> cardBackgroundColor
         },
         animationSpec = tween(400),
@@ -260,7 +263,7 @@ private fun StepCard(
         shadowElevation = elevation,
         color = cardBg,
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().background(cardBg)) {
             // Left accent border
             Box(
                 modifier = Modifier

@@ -52,9 +52,7 @@ fun HorizontalAnimatedStepper(
     inactiveTitleColor: Color,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -175,7 +173,7 @@ private fun AnimatedStepIndicator(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(48.dp)
+            .size(40.dp)
             .drawBehind {
                 if (isCurrent) {
                     drawCircle(
