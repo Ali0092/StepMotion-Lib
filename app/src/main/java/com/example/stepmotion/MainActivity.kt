@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,54 +45,80 @@ class MainActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color(0xFFF8FAFC),
+                                    Color(0xFFEEF2F7),
+                                    Color(0xFFE2E8F0),
+                                )
+                            )
+                        )
                         .verticalScroll(rememberScrollState())
-                        .padding(top = 48.dp, bottom = 32.dp),
+                        .padding(top = 52.dp, bottom = 36.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // 1. Horizontal Simple Stepper
+                    // Header
+                    Text(
+                        text = "StepMotion",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFF1E293B),
+                    )
+                    Text(
+                        text = "Animated Stepper Library",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF94A3B8),
+                        modifier = Modifier.padding(bottom = 28.dp)
+                    )
+
+                    // 1. Horizontal Simple Stepper — Vibrant Blue
                     StepperSection(
                         title = "Horizontal Simple",
-                        accentColor = Color(0xFF007BFF),
+                        subtitle = "Clean & minimal step indicator",
+                        accentColor = Color(0xFF3B82F6),
                         stepCount = 5,
                     ) { selectedIndex ->
                         HorizontalSimpleStepper(
                             modifier = Modifier.fillMaxWidth(),
                             countingList = listOf(1, 2, 3, 4, 5),
-                            titleList = listOf("Step 1", "Step 2", "Step 3", "Step 4", "Step 5"),
+                            titleList = listOf("Details", "Address", "Payment", "Review", "Done"),
                             selectedItemIndex = selectedIndex,
-                            nonSelectedItemColor = Color.Gray,
-                            selectedItemColor = Color(0xFF007BFF),
-                            nonSelectedTitleColor = Color.Gray,
-                            selectedTitleColor = Color(0xFF007BFF)
+                            nonSelectedItemColor = Color(0xFFCBD5E1),
+                            selectedItemColor = Color(0xFF3B82F6),
+                            nonSelectedTitleColor = Color(0xFF94A3B8),
+                            selectedTitleColor = Color(0xFF1E40AF)
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    SectionDivider()
 
-                    // 2. Horizontal Animated Stepper
+                    // 2. Horizontal Animated Stepper — Emerald
                     StepperSection(
                         title = "Horizontal Animated",
+                        subtitle = "Pulse ring, bouncy checkmarks & progress fill",
                         accentColor = Color(0xFF10B981),
                         stepCount = 5,
                     ) { selectedIndex ->
                         HorizontalAnimatedStepper(
                             modifier = Modifier.fillMaxWidth(),
-                            steps = listOf("Cart", "Address", "Payment", "Review", "Done"),
+                            steps = listOf("Cart", "Shipping", "Payment", "Review", "Confirm"),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFF10B981),
-                            inactiveColor = Color.Gray,
-                            activeTitleColor = Color(0xFF10B981),
-                            inactiveTitleColor = Color.Gray,
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF065F46),
+                            inactiveTitleColor = Color(0xFF94A3B8),
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    SectionDivider()
 
-                    // 3. Vertical Simple Stepper
+                    // 3. Vertical Simple Stepper — Warm Amber/Orange
                     StepperSection(
                         title = "Vertical Simple",
-                        accentColor = Color(0xFFFF6D00),
+                        subtitle = "Classic vertical timeline layout",
+                        accentColor = Color(0xFFF59E0B),
                         stepCount = 5,
                     ) { selectedIndex ->
                         VerticalSimpleStepper(
@@ -103,21 +131,22 @@ class MainActivity : ComponentActivity() {
                                 "Choose Provider",
                                 "Pick Date & Time",
                                 "Confirm Details",
-                                "Appointment Booked",
+                                "Booking Complete",
                             ),
                             selectedItemIndex = selectedIndex,
-                            nonSelectedItemColor = Color.Gray,
-                            selectedItemColor = Color(0xFFFF6D00),
-                            nonSelectedTitleColor = Color.Gray,
-                            selectedTitleColor = Color(0xFFFF6D00)
+                            nonSelectedItemColor = Color(0xFFE2E8F0),
+                            selectedItemColor = Color(0xFFF59E0B),
+                            nonSelectedTitleColor = Color(0xFF94A3B8),
+                            selectedTitleColor = Color(0xFF92400E)
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    SectionDivider()
 
-                    // 4. Vertical Card Stepper
+                    // 4. Vertical Card Stepper — Rich Purple
                     StepperSection(
                         title = "Vertical Card",
+                        subtitle = "Cards with expand, crossfade & accent border",
                         accentColor = Color(0xFF8B5CF6),
                         stepCount = 5,
                     ) { selectedIndex ->
@@ -139,11 +168,13 @@ class MainActivity : ComponentActivity() {
                             ),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFF8B5CF6),
-                            inactiveColor = Color.DarkGray,
-                            inActiveBackgroundColor = Color(0xFFFAFAFA),
-                            cardBackgroundColor = Color(0xFFD3D3D3),
+                            inactiveColor = Color(0xFF94A3B8),
+                            inActiveBackgroundColor = Color(0xFFF5F3FF),
+                            cardBackgroundColor = Color(0xFFFFFFFF),
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -151,8 +182,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+private fun SectionDivider() {
+    HorizontalDivider(
+        modifier = Modifier.padding(horizontal = 32.dp, vertical = 20.dp),
+        thickness = 1.dp,
+        color = Color(0xFFE2E8F0)
+    )
+}
+
+@Composable
 private fun StepperSection(
     title: String,
+    subtitle: String,
     accentColor: Color,
     stepCount: Int,
     content: @Composable (Int) -> Unit,
@@ -162,31 +203,39 @@ private fun StepperSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = title,
-            fontSize = 18.sp,
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333),
-            modifier = Modifier.padding(bottom = 8.dp)
+            color = Color(0xFF1E293B),
+        )
+        Text(
+            text = subtitle,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color(0xFF94A3B8),
+            modifier = Modifier.padding(bottom = 12.dp)
         )
 
         content(selectedIndex)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         Button(
             onClick = {
                 selectedIndex = (selectedIndex + 1) % stepCount
             },
-            colors = ButtonDefaults.buttonColors(containerColor = accentColor)
+            colors = ButtonDefaults.buttonColors(containerColor = accentColor),
+            shape = RoundedCornerShape(10.dp),
         ) {
             Text(
                 text = "Next Step",
                 color = Color.White,
                 fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
             )
         }
     }

@@ -1,19 +1,17 @@
 package com.example.stepmotionlib
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -277,7 +275,14 @@ private fun StepCard(
                     }
             )
             Column(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 14.dp)
+                modifier = Modifier
+                    .padding(horizontal = 12.dp, vertical = 14.dp)
+                    .animateContentSize(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = Spring.StiffnessMediumLow
+                        )
+                    )
             ) {
                 Text(
                     text = title,
@@ -285,15 +290,7 @@ private fun StepCard(
                     fontSize = 15.sp,
                     fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,
                 )
-                AnimatedVisibility(
-                    visible = isCurrent && description.isNotEmpty(),
-                    enter = expandVertically(
-                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                    ) + fadeIn(tween(300)),
-                    exit = shrinkVertically(
-                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                    ) + fadeOut(tween(200)),
-                ) {
+                if (isCurrent && description.isNotEmpty()) {
                     Text(
                         text = description,
                         color = titleColor.copy(alpha = 0.7f),
