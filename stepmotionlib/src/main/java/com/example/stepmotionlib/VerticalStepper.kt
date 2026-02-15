@@ -2,10 +2,8 @@ package com.example.stepmotionlib
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -41,130 +39,172 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
+/**
+ * A vertical stepper component that displays steps with circle indicators and text labels.
+ * Features smooth animations for state changes and proper vertical alignment.
+ *
+ * @param steps List of step labels to display
+ * @param currentStep Current step index (0-based)
+ * @param activeColor Color for completed and current steps
+ * @param inactiveColor Color for future steps
+ * @param activeTitleColor Text color for completed and current steps
+ * @param inactiveTitleColor Text color for future steps
+ * @param modifier Modifier to be applied to the stepper
+ * @param circleSize Size of the step indicator circles
+ * @param circleFontSize Font size for numbers inside circles
+ * @param titleFontSize Font size for step labels
+ * @param horizontalSpacing Horizontal spacing between circles and text
+ * @param verticalSpacing Vertical spacing between connector lines
+ * @param connectorThickness Thickness of connector lines between steps
+ * @param borderWidth Width of the border around the current step
+ * @param animationDuration Duration of color and scale animations in milliseconds
+ */
 @Composable
 fun VerticalSimpleStepper(
+    steps: List<String>,
+    currentStep: Int,
+    activeColor: Color,
+    inactiveColor: Color,
+    activeTitleColor: Color,
+    inactiveTitleColor: Color,
     modifier: Modifier = Modifier,
-    countingList: List<Int>,
-    titleList: List<String>,
-    selectedItemIndex: Int,
-    nonSelectedItemColor: Color,
-    selectedItemColor: Color,
-    nonSelectedTitleColor: Color,
-    selectedTitleColor: Color,
+    circleSize: Dp = StepperDefaults.SmallCircleSize,
+    circleFontSize: TextUnit = StepperDefaults.CircleNumberFontSize,
+    titleFontSize: TextUnit = StepperDefaults.CircleNumberFontSize,
+    horizontalSpacing: Dp = 16.dp,
+    verticalSpacing: Dp = StepperDefaults.SmallSpacing,
+    connectorThickness: Dp = StepperDefaults.ThinConnector,
+    borderWidth: Dp = StepperDefaults.BorderWidth,
+    animationDuration: Int = StepperDefaults.ColorAnimationDuration,
+    // Legacy parameters for backward compatibility (prefer using new parameter names above)
+    titleList: List<String>? = null,
+    countingList: List<Int>? = null,
+    selectedItemIndex: Int? = null,
+    selectedItemColor: Color? = null,
+    nonSelectedItemColor: Color? = null,
+    selectedTitleColor: Color? = null,
+    nonSelectedTitleColor: Color? = null,
 ) {
-    Row(
-        modifier.fillMaxWidth(),
-    ) {
-        StepperLeftBar(
-            items = countingList,
-            selectedItemColor = selectedItemColor,
-            nonSelectedItemColor = nonSelectedItemColor,
-            selectedItemIndex = selectedItemIndex
-        )
-        StepperRightBar(
-            titleList = titleList,
-            selectedIndex = selectedItemIndex,
-            nonSelectedTitleColor = nonSelectedTitleColor,
-            selectedTitleColor = selectedTitleColor
-        )
-    }
-}
+    // Handle backward compatibility
+    val actualSteps = titleList ?: steps
+    val actualCurrentStep = selectedItemIndex ?: currentStep
+    val actualActiveColor = selectedItemColor ?: activeColor
+    val actualInactiveColor = nonSelectedItemColor ?: inactiveColor
+    val actualActiveTitleColor = selectedTitleColor ?: activeTitleColor
+    val actualInactiveTitleColor = nonSelectedTitleColor ?: inactiveTitleColor
 
-@Composable
-fun StepperLeftBar(
-    modifier: Modifier = Modifier,
-    items: List<Int>,
-    selectedItemIndex: Int = 0,
-    nonSelectedItemColor: Color = Color.LightGray,
-    selectedItemColor: Color = Color.Blue,
-) {
-    Column(
-        modifier = modifier.padding(horizontal = 16.dp)
+    Row(
+        modifier = modifier.fillMaxWidth()
     ) {
-        items.forEachIndexed { index, _ ->
-            if (index == items.lastIndex) {
-                StepperLeftBarSingleItem(
-                    text = items[index].toString(),
-                    isEndNode = true,
-                    isPrevious = index < selectedItemIndex,
-                    isCurrent = selectedItemIndex == index,
-                    isNext = index > selectedItemIndex,
-                    nonSelectedItemColor = nonSelectedItemColor,
-                    selectedItemColor = selectedItemColor
+        // Left column: Circles and connectors
+        Column(
+            modifier = Modifier.padding(horizontal = horizontalSpacing),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            actualSteps.forEachIndexed { index, _ ->
+                VerticalStepIndicator(
+                    stepNumber = (index + 1).toString(),
+                    isPrevious = index < actualCurrentStep,
+                    isCurrent = index == actualCurrentStep,
+                    isNext = index > actualCurrentStep,
+                    isEndNode = index == actualSteps.lastIndex,
+                    activeColor = actualActiveColor,
+                    inactiveColor = actualInactiveColor,
+                    circleSize = circleSize,
+                    circleFontSize = circleFontSize,
+                    verticalSpacing = verticalSpacing,
+                    connectorThickness = connectorThickness,
+                    borderWidth = borderWidth,
+                    animationDuration = animationDuration,
+                    modifier = if (index == actualSteps.lastIndex) Modifier else Modifier.weight(1f)
                 )
-            } else {
-                StepperLeftBarSingleItem(
-                    modifier = Modifier.weight(1f),
-                    text = items[index].toString(),
-                    isPrevious = index < selectedItemIndex,
-                    isCurrent = selectedItemIndex == index,
-                    isNext = index > selectedItemIndex,
-                    nonSelectedItemColor = nonSelectedItemColor,
-                    selectedItemColor = selectedItemColor
+            }
+        }
+
+        // Right column: Text labels
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            actualSteps.forEachIndexed { index, title ->
+                VerticalStepLabel(
+                    title = title,
+                    isActive = index <= actualCurrentStep,
+                    activeColor = actualActiveTitleColor,
+                    inactiveColor = actualInactiveTitleColor,
+                    fontSize = titleFontSize,
+                    isEndNode = index == actualSteps.lastIndex,
+                    animationDuration = animationDuration,
+                    modifier = if (index == actualSteps.lastIndex) Modifier else Modifier.weight(1f)
                 )
             }
         }
     }
-
 }
 
 @Composable
-fun StepperLeftBarSingleItem(
-    modifier: Modifier = Modifier,
-    text: String = "",
-    isEndNode: Boolean = false,
-    isPrevious: Boolean = false,
-    isCurrent: Boolean = false,
-    isNext: Boolean = false,
-    nonSelectedItemColor: Color,
-    selectedItemColor: Color,
+private fun VerticalStepIndicator(
+    stepNumber: String,
+    isPrevious: Boolean,
+    isCurrent: Boolean,
+    isNext: Boolean,
+    isEndNode: Boolean,
+    activeColor: Color,
+    inactiveColor: Color,
+    circleSize: Dp,
+    circleFontSize: TextUnit,
+    verticalSpacing: Dp,
+    connectorThickness: Dp,
+    borderWidth: Dp,
+    animationDuration: Int,
+    modifier: Modifier = Modifier
 ) {
-    val nonSelectedColor = selectedItemColor.copy(alpha = 0.3f)
-
     val containerColor by animateColorAsState(
-        targetValue = if (isNext) nonSelectedColor else selectedItemColor,
-        animationSpec = tween(400),
+        targetValue = if (isNext) inactiveColor.copy(alpha = 0.3f) else activeColor,
+        animationSpec = tween(animationDuration),
         label = "containerColor"
     )
 
-    val borderWidth by animateDpAsState(
-        targetValue = if (isCurrent) 2.dp else 0.dp,
-        animationSpec = tween(300),
+    val borderWidthAnimated by animateDpAsState(
+        targetValue = if (isCurrent) borderWidth else 0.dp,
+        animationSpec = tween(animationDuration - 100),
         label = "borderWidth"
     )
 
     val borderColor by animateColorAsState(
-        targetValue = if (isCurrent) selectedItemColor else Color.Transparent,
-        animationSpec = tween(300),
+        targetValue = if (isCurrent) activeColor else Color.Transparent,
+        animationSpec = tween(animationDuration - 100),
         label = "borderColor"
     )
 
     val indicatorScale by animateFloatAsState(
         targetValue = if (isCurrent) 1.1f else 1.0f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessMediumLow
-        ),
+        animationSpec = StepperDefaults.bouncySpring(),
         label = "indicatorScale"
     )
 
     val innerPadding by animateDpAsState(
         targetValue = if (isCurrent) 4.dp else 0.dp,
-        animationSpec = tween(300),
+        animationSpec = tween(animationDuration - 100),
         label = "innerPadding"
     )
 
     // Connector line animation
     val connectorFill by animateFloatAsState(
         targetValue = if (isCurrent || isPrevious) 1f else 0f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
+        animationSpec = StepperDefaults.smoothSpring(),
         label = "connectorFill"
+    )
+
+    val lineColor by animateColorAsState(
+        targetValue = if (isCurrent || isPrevious) activeColor else inactiveColor,
+        animationSpec = tween(animationDuration),
+        label = "lineColor"
     )
 
     Column(
@@ -173,11 +213,12 @@ fun StepperLeftBarSingleItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            contentAlignment = Alignment.Center, modifier = Modifier
-                .size(32.dp)
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(circleSize)
                 .scale(indicatorScale)
                 .border(
-                    width = borderWidth,
+                    width = borderWidthAnimated,
                     color = borderColor,
                     shape = CircleShape
                 )
@@ -187,7 +228,6 @@ fun StepperLeftBarSingleItem(
                 shape = CircleShape,
                 colors = CardDefaults.cardColors(containerColor = containerColor)
             ) {
-
                 Box(Modifier.fillMaxSize()) {
                     AnimatedContent(
                         targetState = isPrevious,
@@ -206,34 +246,28 @@ fun StepperLeftBarSingleItem(
                             )
                         } else {
                             Text(
-                                text = text,
+                                text = stepNumber,
                                 color = Color.White,
-                                fontSize = 18.sp
+                                fontSize = circleFontSize
                             )
                         }
                     }
                 }
-
             }
         }
 
+        // Connector line
         if (!isEndNode) {
-            val lineColor by animateColorAsState(
-                targetValue = if (isCurrent || isPrevious) selectedItemColor else nonSelectedItemColor,
-                animationSpec = tween(400),
-                label = "lineColor"
-            )
-
             Spacer(
                 modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .width(2.dp)
+                    .padding(vertical = verticalSpacing)
+                    .width(connectorThickness)
                     .weight(1f)
                     .drawBehind {
                         val lineX = size.width / 2
                         // Inactive background
                         drawLine(
-                            color = nonSelectedItemColor,
+                            color = inactiveColor,
                             start = Offset(lineX, 0f),
                             end = Offset(lineX, size.height),
                             strokeWidth = size.width,
@@ -256,58 +290,30 @@ fun StepperLeftBarSingleItem(
 }
 
 @Composable
-fun StepperRightBar(
-    modifier: Modifier = Modifier,
-    titleList: List<String>,
-    selectedIndex: Int = 0,
-    nonSelectedTitleColor: Color,
-    selectedTitleColor: Color,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
-    ) {
-        titleList.forEachIndexed { index, _ ->
-            if (index == titleList.lastIndex) {
-                StepperRightBarSingleItem(
-                    title = titleList[index].toString(),
-                    isEndNode = true,
-                    isCurrent = index <= selectedIndex,
-                    nonSelectedTitleColor = nonSelectedTitleColor,
-                    selectedTitleColor = selectedTitleColor
-                )
-            } else {
-                StepperRightBarSingleItem(
-                    modifier = Modifier.weight(1f),
-                    title = titleList[index].toString(),
-                    isCurrent = index <= selectedIndex,
-                    nonSelectedTitleColor = nonSelectedTitleColor,
-                    selectedTitleColor = selectedTitleColor
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun StepperRightBarSingleItem(
-    modifier: Modifier = Modifier,
-    title: String = "",
-    isCurrent: Boolean = false,
-    isEndNode: Boolean = false,
-    nonSelectedTitleColor: Color,
-    selectedTitleColor: Color,
+private fun VerticalStepLabel(
+    title: String,
+    isActive: Boolean,
+    activeColor: Color,
+    inactiveColor: Color,
+    fontSize: TextUnit,
+    isEndNode: Boolean,
+    animationDuration: Int,
+    modifier: Modifier = Modifier
 ) {
     val titleColor by animateColorAsState(
-        targetValue = if (isCurrent) selectedTitleColor else nonSelectedTitleColor,
-        animationSpec = tween(400),
+        targetValue = if (isActive) activeColor else inactiveColor,
+        animationSpec = tween(animationDuration),
         label = "titleColor"
     )
 
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
             text = title,
             color = titleColor,
-            fontSize = 16.sp,
+            fontSize = fontSize,
             fontWeight = FontWeight.Bold,
         )
         if (!isEndNode) {

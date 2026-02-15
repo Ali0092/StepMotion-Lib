@@ -9,9 +9,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import kotlinx.coroutines.launch
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
@@ -39,64 +38,98 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 
+/**
+ * A horizontal animated stepper component with pulse effects on the current step.
+ * Features smooth animations, perfect alignment, and configurable pulse animation.
+ *
+ * @param steps List of step labels to display
+ * @param currentStep Current step index (0-based)
+ * @param activeColor Color for completed and current steps
+ * @param inactiveColor Color for future steps
+ * @param activeTitleColor Text color for completed and current steps
+ * @param inactiveTitleColor Text color for future steps
+ * @param modifier Modifier to be applied to the stepper
+ * @param circleSize Size of the step indicator circles
+ * @param circleFontSize Font size for numbers inside circles
+ * @param titleFontSize Font size for step labels
+ * @param spacing Vertical spacing between circles and text
+ * @param connectorThickness Thickness of connector lines between steps
+ * @param animationDuration Duration of color and scale animations in milliseconds
+ * @param enablePulseAnimation Enable/disable the pulse ring animation on current step
+ * @param pulseAnimationDuration Duration of the pulse animation in milliseconds
+ */
 @Composable
 fun HorizontalAnimatedStepper(
-    modifier: Modifier = Modifier,
     steps: List<String>,
     currentStep: Int,
     activeColor: Color,
     inactiveColor: Color,
     activeTitleColor: Color,
     inactiveTitleColor: Color,
+    modifier: Modifier = Modifier,
+    circleSize: Dp = StepperDefaults.LargeCircleSize,
+    circleFontSize: TextUnit = StepperDefaults.CircleNumberFontSize,
+    titleFontSize: TextUnit = StepperDefaults.SmallTitleFontSize,
+    spacing: Dp = StepperDefaults.MediumSpacing,
+    connectorThickness: Dp = StepperDefaults.MediumConnector,
+    animationDuration: Int = StepperDefaults.ColorAnimationDuration,
+    enablePulseAnimation: Boolean = true,
+    pulseAnimationDuration: Int = StepperDefaults.PulseAnimationDuration,
 ) {
-    Column(
+    Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalAlignment = Alignment.Top
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            steps.forEachIndexed { index, _ ->
+        steps.forEachIndexed { index, title ->
+            // Column containing circle and text, centered
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.wrapContentWidth()
+            ) {
+                // Animated circle indicator with pulse effect
                 AnimatedStepIndicator(
                     stepNumber = index + 1,
                     isCompleted = index < currentStep,
                     isCurrent = index == currentStep,
                     activeColor = activeColor,
                     inactiveColor = inactiveColor,
+                    circleSize = circleSize,
+                    circleFontSize = circleFontSize,
+                    animationDuration = animationDuration,
+                    enablePulse = enablePulseAnimation,
+                    pulseDuration = pulseAnimationDuration
                 )
-                if (index < steps.lastIndex) {
-                    AnimatedConnectorLine(
-                        modifier = Modifier.weight(1f),
-                        isCompleted = index < currentStep,
-                        activeColor = activeColor,
-                        inactiveColor = inactiveColor,
-                    )
-                }
+
+                Spacer(modifier = Modifier.height(spacing))
+
+                // Text label
+                AnimatedStepLabel(
+                    title = title,
+                    isActive = index <= currentStep,
+                    isCurrent = index == currentStep,
+                    activeColor = activeTitleColor,
+                    inactiveColor = inactiveTitleColor,
+                    fontSize = titleFontSize,
+                    animationDuration = animationDuration
+                )
             }
-        }
-        Spacer(modifier = Modifier.height(6.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            steps.forEachIndexed { index, title ->
-                val titleColor by animateColorAsState(
-                    targetValue = if (index <= currentStep) activeTitleColor else inactiveTitleColor,
-                    animationSpec = tween(400),
-                    label = "titleColor"
-                )
-                Text(
-                    text = title,
-                    color = titleColor,
-                    fontSize = 12.sp,
-                    fontWeight = if (index == currentStep) FontWeight.Bold else FontWeight.Normal,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Start,
-                    maxLines = 1,
+
+            // Connector line (only for non-last items)
+            if (index < steps.lastIndex) {
+                AnimatedConnectorLine(
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .padding(horizontal = 2.dp),
+                    isCompleted = index < currentStep,
+                    activeColor = activeColor,
+                    inactiveColor = inactiveColor,
+                    thickness = connectorThickness
                 )
             }
         }
@@ -110,13 +143,18 @@ private fun AnimatedStepIndicator(
     isCurrent: Boolean,
     activeColor: Color,
     inactiveColor: Color,
+    circleSize: Dp,
+    circleFontSize: TextUnit,
+    animationDuration: Int,
+    enablePulse: Boolean,
+    pulseDuration: Int
 ) {
     val bgColor by animateColorAsState(
         targetValue = when {
             isCompleted || isCurrent -> activeColor
             else -> inactiveColor.copy(alpha = 0.3f)
         },
-        animationSpec = tween(400),
+        animationSpec = tween(animationDuration),
         label = "indicatorBg"
     )
 
@@ -142,15 +180,15 @@ private fun AnimatedStepIndicator(
     val pulseScale = remember { Animatable(1f) }
     val pulseAlpha = remember { Animatable(0f) }
 
-    LaunchedEffect(isCurrent) {
-        if (isCurrent) {
+    LaunchedEffect(isCurrent, enablePulse) {
+        if (isCurrent && enablePulse) {
             // Launch both animations in parallel
             launch {
                 pulseScale.snapTo(1f)
                 pulseScale.animateTo(
                     targetValue = 1.3f,
                     animationSpec = infiniteRepeatable(
-                        animation = tween(1000, easing = LinearEasing),
+                        animation = tween(pulseDuration, easing = LinearEasing),
                         repeatMode = RepeatMode.Restart
                     )
                 )
@@ -160,7 +198,7 @@ private fun AnimatedStepIndicator(
                 pulseAlpha.animateTo(
                     targetValue = 0f,
                     animationSpec = infiniteRepeatable(
-                        animation = tween(1000, easing = LinearEasing),
+                        animation = tween(pulseDuration, easing = LinearEasing),
                         repeatMode = RepeatMode.Restart
                     )
                 )
@@ -174,12 +212,12 @@ private fun AnimatedStepIndicator(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(40.dp)
+            .size(circleSize)
             .drawBehind {
-                if (isCurrent) {
+                if (isCurrent && enablePulse) {
                     drawCircle(
                         color = activeColor.copy(alpha = pulseAlpha.value),
-                        radius = (20.dp * pulseScale.value).toPx(),
+                        radius = (circleSize.value / 2 * pulseScale.value).dp.toPx(),
                     )
                 }
             }
@@ -187,7 +225,7 @@ private fun AnimatedStepIndicator(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(40.dp)
+                .size(circleSize)
                 .scale(scale)
                 .clip(CircleShape)
                 .drawBehind {
@@ -200,14 +238,14 @@ private fun AnimatedStepIndicator(
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier
-                        .size(22.dp)
+                        .size(circleSize * 0.55f)
                         .scale(checkScale)
                 )
             } else {
                 Text(
                     text = stepNumber.toString(),
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = circleFontSize,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -216,11 +254,38 @@ private fun AnimatedStepIndicator(
 }
 
 @Composable
+private fun AnimatedStepLabel(
+    title: String,
+    isActive: Boolean,
+    isCurrent: Boolean,
+    activeColor: Color,
+    inactiveColor: Color,
+    fontSize: TextUnit,
+    animationDuration: Int
+) {
+    val titleColor by animateColorAsState(
+        targetValue = if (isActive) activeColor else inactiveColor,
+        animationSpec = tween(animationDuration),
+        label = "titleColor"
+    )
+
+    Text(
+        text = title,
+        color = titleColor,
+        fontSize = fontSize,
+        fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Normal,
+        textAlign = TextAlign.Center,
+        maxLines = 2,
+    )
+}
+
+@Composable
 private fun AnimatedConnectorLine(
     modifier: Modifier = Modifier,
     isCompleted: Boolean,
     activeColor: Color,
     inactiveColor: Color,
+    thickness: Dp
 ) {
     val fillFraction by animateFloatAsState(
         targetValue = if (isCompleted) 1f else 0f,
@@ -232,9 +297,7 @@ private fun AnimatedConnectorLine(
     )
 
     Canvas(
-        modifier = modifier
-            .height(3.dp)
-            .padding(horizontal = 2.dp)
+        modifier = modifier.height(thickness)
     ) {
         val lineY = size.height / 2
         // Draw inactive background line

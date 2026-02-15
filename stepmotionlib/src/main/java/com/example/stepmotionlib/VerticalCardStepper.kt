@@ -1,12 +1,10 @@
 package com.example.stepmotionlib
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -43,23 +41,64 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * A vertical card stepper component that displays steps with circle indicators and expandable cards.
+ * Features smooth animations and shows descriptions for the current step.
+ *
+ * @param steps List of step labels to display
+ * @param descriptions List of descriptions for each step (shown when current)
+ * @param currentStep Current step index (0-based)
+ * @param activeColor Color for completed and current steps
+ * @param inactiveColor Color for future steps
+ * @param cardBackgroundColor Background color for non-current step cards
+ * @param activeCardBackgroundColor Background color for the current step card
+ * @param modifier Modifier to be applied to the stepper
+ * @param circleSize Size of the step indicator circles
+ * @param circleFontSize Font size for numbers inside circles
+ * @param titleFontSize Font size for step titles
+ * @param descriptionFontSize Font size for step descriptions
+ * @param cardRadius Corner radius for step cards
+ * @param cardPadding Padding inside step cards
+ * @param cardSpacing Spacing between step cards
+ * @param horizontalSpacing Horizontal spacing between circles and cards
+ * @param connectorThickness Thickness of connector lines between steps
+ * @param accentBorderWidth Width of the colored accent border on cards
+ * @param animationDuration Duration of color and elevation animations in milliseconds
+ */
 @Composable
 fun VerticalCardStepper(
-    modifier: Modifier = Modifier,
     steps: List<String>,
     descriptions: List<String>,
     currentStep: Int,
     activeColor: Color,
     inactiveColor: Color,
-    inActiveBackgroundColor: Color,
     cardBackgroundColor: Color,
+    activeCardBackgroundColor: Color,
+    modifier: Modifier = Modifier,
+    circleSize: Dp = StepperDefaults.MediumCircleSize,
+    circleFontSize: TextUnit = 15.sp,
+    titleFontSize: TextUnit = 15.sp,
+    descriptionFontSize: TextUnit = StepperDefaults.DescriptionFontSize,
+    cardRadius: Dp = 12.dp,
+    cardPadding: Dp = 14.dp,
+    cardSpacing: Dp = StepperDefaults.LargeSpacing,
+    horizontalSpacing: Dp = 12.dp,
+    connectorThickness: Dp = StepperDefaults.MediumConnector,
+    accentBorderWidth: Dp = 4.dp,
+    animationDuration: Int = StepperDefaults.ColorAnimationDuration,
+    // Legacy parameter for backward compatibility (prefer using activeCardBackgroundColor)
+    inActiveBackgroundColor: Color? = null,
 ) {
+    // Handle backward compatibility
+    val actualActiveCardBg = inActiveBackgroundColor ?: activeCardBackgroundColor
+
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         steps.forEachIndexed { index, title ->
             val isCompleted = index < currentStep
@@ -82,20 +121,23 @@ fun VerticalCardStepper(
                         isCurrent = isCurrent,
                         activeColor = activeColor,
                         inactiveColor = inactiveColor,
+                        circleSize = circleSize,
+                        fontSize = circleFontSize,
+                        animationDuration = animationDuration
                     )
                     if (!isLast) {
                         CardConnectorLine(
                             modifier = Modifier
                                 .weight(1f)
-                                .width(3.dp),
+                                .width(connectorThickness),
                             isCompleted = isCompleted,
                             activeColor = activeColor,
-                            inactiveColor = inactiveColor,
+                            inactiveColor = inactiveColor
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(horizontalSpacing))
 
                 // Right card column
                 StepCard(
@@ -105,11 +147,17 @@ fun VerticalCardStepper(
                     isCurrent = isCurrent,
                     activeColor = activeColor,
                     inactiveColor = inactiveColor,
-                    inActiveBackgroundColor = inActiveBackgroundColor,
+                    activeCardBackgroundColor = actualActiveCardBg,
                     cardBackgroundColor = cardBackgroundColor,
+                    titleFontSize = titleFontSize,
+                    descriptionFontSize = descriptionFontSize,
+                    cardRadius = cardRadius,
+                    cardPadding = cardPadding,
+                    accentBorderWidth = accentBorderWidth,
+                    animationDuration = animationDuration,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(bottom = if (isLast) 0.dp else 8.dp)
+                        .padding(bottom = if (isLast) 0.dp else cardSpacing)
                 )
             }
         }
@@ -123,18 +171,21 @@ private fun StepBadge(
     isCurrent: Boolean,
     activeColor: Color,
     inactiveColor: Color,
+    circleSize: Dp,
+    fontSize: TextUnit,
+    animationDuration: Int
 ) {
     val bgColor by animateColorAsState(
         targetValue = when {
             isCompleted || isCurrent -> activeColor
             else -> inactiveColor.copy(alpha = 0.3f)
         },
-        animationSpec = tween(400),
+        animationSpec = tween(animationDuration),
         label = "badgeBg"
     )
 
     Surface(
-        modifier = Modifier.size(36.dp),
+        modifier = Modifier.size(circleSize),
         shape = CircleShape,
         color = bgColor,
     ) {
@@ -152,13 +203,13 @@ private fun StepBadge(
                         imageVector = Icons.Rounded.Check,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(circleSize * 0.55f)
                     )
                 } else {
                     Text(
                         text = stepNumber.toString(),
                         color = Color.White,
-                        fontSize = 15.sp,
+                        fontSize = fontSize,
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -176,10 +227,7 @@ private fun CardConnectorLine(
 ) {
     val fillFraction by animateFloatAsState(
         targetValue = if (isCompleted) 1f else 0f,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioNoBouncy,
-            stiffness = Spring.StiffnessLow
-        ),
+        animationSpec = StepperDefaults.smoothSpring(),
         label = "cardConnectorFill"
     )
 
@@ -216,22 +264,28 @@ private fun StepCard(
     isCurrent: Boolean,
     activeColor: Color,
     inactiveColor: Color,
-    inActiveBackgroundColor: Color,
+    activeCardBackgroundColor: Color,
     cardBackgroundColor: Color,
+    titleFontSize: TextUnit,
+    descriptionFontSize: TextUnit,
+    cardRadius: Dp,
+    cardPadding: Dp,
+    accentBorderWidth: Dp,
+    animationDuration: Int,
     modifier: Modifier = Modifier,
 ) {
     val elevation by animateDpAsState(
         targetValue = if (isCurrent) 2.dp else 0.dp,
-        animationSpec = tween(400),
+        animationSpec = tween(animationDuration),
         label = "cardElevation"
     )
 
     val cardBg by animateColorAsState(
         targetValue = when {
-            isCurrent -> inActiveBackgroundColor
+            isCurrent -> activeCardBackgroundColor
             else -> cardBackgroundColor
         },
-        animationSpec = tween(400),
+        animationSpec = tween(animationDuration),
         label = "cardBg"
     )
 
@@ -240,7 +294,7 @@ private fun StepCard(
             isCompleted || isCurrent -> activeColor
             else -> inactiveColor.copy(alpha = 0.2f)
         },
-        animationSpec = tween(400),
+        animationSpec = tween(animationDuration),
         label = "accentColor"
     )
 
@@ -250,14 +304,13 @@ private fun StepCard(
             isCompleted -> activeColor.copy(alpha = 0.7f)
             else -> inactiveColor
         },
-        animationSpec = tween(400),
+        animationSpec = tween(animationDuration),
         label = "titleColor"
     )
 
     Surface(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp),
+        modifier = modifier.clip(RoundedCornerShape(cardRadius)),
+        shape = RoundedCornerShape(cardRadius),
         shadowElevation = elevation,
         color = cardBg,
     ) {
@@ -265,7 +318,7 @@ private fun StepCard(
             // Left accent border
             Box(
                 modifier = Modifier
-                    .width(4.dp)
+                    .width(accentBorderWidth)
                     .fillMaxHeight()
                     .drawBehind {
                         drawRoundRect(
@@ -276,25 +329,22 @@ private fun StepCard(
             )
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp, vertical = 14.dp)
+                    .padding(horizontal = cardPadding, vertical = cardPadding)
                     .animateContentSize(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = Spring.StiffnessMediumLow
-                        )
+                        animationSpec = StepperDefaults.bouncySpring()
                     )
             ) {
                 Text(
                     text = title,
                     color = titleColor,
-                    fontSize = 15.sp,
+                    fontSize = titleFontSize,
                     fontWeight = if (isCurrent) FontWeight.Bold else FontWeight.Medium,
                 )
                 if (isCurrent && description.isNotEmpty()) {
                     Text(
                         text = description,
                         color = titleColor.copy(alpha = 0.7f),
-                        fontSize = 13.sp,
+                        fontSize = descriptionFontSize,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(top = 6.dp)
                     )
