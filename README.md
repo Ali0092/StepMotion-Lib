@@ -17,8 +17,9 @@
 ---
 
 ## 📸 Preview
-<img src="https://github.com/user-attachments/assets/bf298f58-ab87-4fe3-9588-2d9857b779b3" width="40%">
-<!-- ![stepMotion_demo](https://github.com/user-attachments/assets/bf298f58-ab87-4fe3-9588-2d9857b779b3) -->
+<img width="30%" height="2400" alt="Screenshot_20260215_234011" src="https://github.com/user-attachments/assets/d269884e-5172-4019-a1d1-d09d5cf159d2" />
+<img width="30%" height="2400" alt="Screenshot_20260215_234040" src="https://github.com/user-attachments/assets/7ce15525-de28-4aa9-82a5-d955f6b46f1a" />
+<img width="30%" height="2400" alt="Screenshot_20260215_234100" src="https://github.com/user-attachments/assets/0ae5dd69-e1d3-4ad9-a83e-351ce285f979" />
 
 
 ---
