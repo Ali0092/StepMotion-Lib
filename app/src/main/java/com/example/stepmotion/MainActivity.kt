@@ -46,13 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color(0xFFF8FAFC),
-                                    Color(0xFFEEF2F7),
-                                    Color(0xFFE2E8F0),
-                                )
-                            )
+                            Color.White
                         )
                         .verticalScroll(rememberScrollState())
                         .padding(top = 52.dp, bottom = 36.dp),
@@ -109,7 +103,7 @@ class MainActivity : ComponentActivity() {
                             activeTitleColor = Color(0xFF6B21A8),
                             inactiveTitleColor = Color(0xFF94A3B8),
                             // Custom sizes
-                            circleSize = 48.dp,
+                            circleSize = 42.dp,
                             titleFontSize = 16.sp,
                             spacing = 8.dp,
                             connectorThickness = 4.dp

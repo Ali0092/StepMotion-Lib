@@ -80,7 +80,7 @@ fun VerticalCardStepper(
     cardBackgroundColor: Color,
     activeCardBackgroundColor: Color,
     modifier: Modifier = Modifier,
-    circleSize: Dp = StepperDefaults.MediumCircleSize,
+    circleSize: Dp = StepperDefaults.SmallCircleSize,
     circleFontSize: TextUnit = 15.sp,
     titleFontSize: TextUnit = 15.sp,
     descriptionFontSize: TextUnit = StepperDefaults.DescriptionFontSize,

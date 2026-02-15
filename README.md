@@ -1,4 +1,4 @@
-clau# 🚀 StepMotion
+# StepMotion
 [![](https://jitpack.io/v/Ali0092/StepMotion-Lib.svg)](https://jitpack.io/#Ali0092/StepMotion-Lib)
 
 
@@ -45,53 +45,159 @@ dependencies {
 
 ---
 
-## 🛆 Usage
+## How to Use
 
-```kotlin
-//Horizontal Stepper
-HorizontalSimpleStepper(
-    countingList = listOf(1, 2, 3, 4),
-    titleList = listOf("Profile", "Upload", "Review", "Done"),
-    selectedItemIndex = 2,
-    nonSelectedItemColor = Color.LightGray,
-    selectedItemColor = Color(0xFF3F51B5),
-    nonSelectedTitleColor = Color.Gray,
-    selectedTitleColor = Color.Black
-)
-
-//Vertical Stepper
-VerticalSimpleStepper(
-    countingList = listOf(1, 2, 3, 4),
-    titleList = listOf("Profile", "Upload", "Review", "Done"),
-    selectedItemIndex = 2,
-    nonSelectedItemColor = Color.LightGray,
-    selectedItemColor = Color(0xFF3F51B5),
-    nonSelectedTitleColor = Color.Gray,
-    selectedTitleColor = Color.Black
-)
-
-
-```
-
-### Parameters
-
-| Name                    | Type           | Description                                 |
-| ----------------------- | -------------- | ------------------------------------------- |
-| `countingList`          | `List<Int>`    | Step numbers shown in bubbles               |
-| `titleList`             | `List<String>` | Titles under each step                      |
-| `selectedItemIndex`     | `Int`          | Currently active step index (zero-based)    |
-| `selectedItemColor`     | `Color`        | Color for selected and completed steps      |
-| `nonSelectedItemColor`  | `Color`        | Color for upcoming/inactive steps           |
-| `selectedTitleColor`    | `Color`        | Color for the current/completed step titles |
-| `nonSelectedTitleColor` | `Color`        | Color for the inactive step titles          |
+StepMotion provides **4 stepper variants** to fit different UI needs. All steppers use a **0-based** `currentStep` index and animate smoothly between state changes.
 
 ---
 
+### 1. HorizontalSimpleStepper
 
-## ⚧️ Upcoming
+A clean horizontal stepper with circle indicators and text labels below each step.
 
-- 🎮 Animated transitions
-- 🧹 Modular customization slots (icons, progress bar styles)
+<!-- Screenshot placeholder -->
+
+```kotlin
+HorizontalSimpleStepper(
+    steps = listOf("Profile", "Upload", "Review", "Done"),
+    currentStep = 2,
+    activeColor = Color(0xFF3F51B5),
+    inactiveColor = Color.LightGray,
+    activeTitleColor = Color.Black,
+    inactiveTitleColor = Color.Gray
+)
+```
+
+**Optional parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `circleSize` | `Dp` | `32.dp` | Size of step indicator circles |
+| `circleFontSize` | `TextUnit` | `16.sp` | Font size for numbers inside circles |
+| `titleFontSize` | `TextUnit` | `13.sp` | Font size for step labels |
+| `spacing` | `Dp` | `4.dp` | Vertical spacing between circle and label |
+| `connectorThickness` | `Dp` | `2.dp` | Thickness of connector lines |
+| `borderWidth` | `Dp` | `2.dp` | Border width around the current step circle |
+| `animationDuration` | `Int` | `400` | Animation duration in milliseconds |
+
+---
+
+### 2. HorizontalAnimatedStepper
+
+A horizontal stepper with a pulse ring animation on the current step for added visual emphasis.
+
+<!-- Screenshot placeholder -->
+
+```kotlin
+HorizontalAnimatedStepper(
+    steps = listOf("Profile", "Upload", "Review", "Done"),
+    currentStep = 1,
+    activeColor = Color(0xFF3F51B5),
+    inactiveColor = Color.LightGray,
+    activeTitleColor = Color.Black,
+    inactiveTitleColor = Color.Gray
+)
+```
+
+**Optional parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `circleSize` | `Dp` | `32.dp` | Size of step indicator circles |
+| `circleFontSize` | `TextUnit` | `16.sp` | Font size for numbers inside circles |
+| `titleFontSize` | `TextUnit` | `12.sp` | Font size for step labels |
+| `spacing` | `Dp` | `6.dp` | Vertical spacing between circle and label |
+| `connectorThickness` | `Dp` | `3.dp` | Thickness of connector lines |
+| `animationDuration` | `Int` | `400` | Animation duration in milliseconds |
+| `enablePulseAnimation` | `Boolean` | `true` | Enable/disable pulse ring on current step |
+| `pulseAnimationDuration` | `Int` | `1000` | Duration of the pulse animation cycle |
+
+---
+
+### 3. VerticalSimpleStepper
+
+A vertical stepper with circles on the left and text labels on the right, connected by vertical lines.
+
+<!-- Screenshot placeholder -->
+
+```kotlin
+VerticalSimpleStepper(
+    steps = listOf("Profile", "Upload", "Review", "Done"),
+    currentStep = 2,
+    activeColor = Color(0xFF3F51B5),
+    inactiveColor = Color.LightGray,
+    activeTitleColor = Color.Black,
+    inactiveTitleColor = Color.Gray
+)
+```
+
+**Optional parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `circleSize` | `Dp` | `32.dp` | Size of step indicator circles |
+| `circleFontSize` | `TextUnit` | `16.sp` | Font size for numbers inside circles |
+| `titleFontSize` | `TextUnit` | `16.sp` | Font size for step labels |
+| `horizontalSpacing` | `Dp` | `16.dp` | Spacing between circles and text labels |
+| `verticalSpacing` | `Dp` | `4.dp` | Spacing around connector lines |
+| `connectorThickness` | `Dp` | `2.dp` | Thickness of connector lines |
+| `borderWidth` | `Dp` | `2.dp` | Border width around the current step circle |
+| `animationDuration` | `Int` | `400` | Animation duration in milliseconds |
+
+---
+
+### 4. VerticalCardStepper
+
+A vertical stepper with expandable cards that show descriptions for the current step. Great for onboarding flows and order tracking.
+
+<!-- Screenshot placeholder -->
+
+```kotlin
+VerticalCardStepper(
+    steps = listOf("Profile", "Upload", "Review", "Done"),
+    descriptions = listOf(
+        "Fill in your personal details",
+        "Upload required documents",
+        "Review your application",
+        "You're all set!"
+    ),
+    currentStep = 1,
+    activeColor = Color(0xFF3F51B5),
+    inactiveColor = Color.LightGray,
+    cardBackgroundColor = Color(0xFFF5F5F5),
+    activeCardBackgroundColor = Color(0xFFE8EAF6)
+)
+```
+
+**Optional parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `circleSize` | `Dp` | `32.dp` | Size of step indicator circles |
+| `circleFontSize` | `TextUnit` | `15.sp` | Font size for numbers inside circles |
+| `titleFontSize` | `TextUnit` | `15.sp` | Font size for step titles |
+| `descriptionFontSize` | `TextUnit` | `12.sp` | Font size for step descriptions |
+| `cardRadius` | `Dp` | `12.dp` | Corner radius for step cards |
+| `cardPadding` | `Dp` | `14.dp` | Padding inside step cards |
+| `cardSpacing` | `Dp` | `8.dp` | Spacing between step cards |
+| `horizontalSpacing` | `Dp` | `12.dp` | Spacing between circles and cards |
+| `connectorThickness` | `Dp` | `3.dp` | Thickness of connector lines |
+| `accentBorderWidth` | `Dp` | `4.dp` | Width of the colored accent border on cards |
+| `animationDuration` | `Int` | `400` | Animation duration in milliseconds |
+
+---
+
+### Common Parameters (all steppers)
+
+| Parameter | Type | Description |
+|---|---|---|
+| `steps` | `List<String>` | List of step labels to display |
+| `currentStep` | `Int` | Current step index (0-based) |
+| `activeColor` | `Color` | Color for completed and current step indicators |
+| `inactiveColor` | `Color` | Color for future/upcoming step indicators |
+| `activeTitleColor` | `Color` | Text color for completed and current steps |
+| `inactiveTitleColor` | `Color` | Text color for future steps |
+| `modifier` | `Modifier` | Modifier to apply to the stepper |
 
 ---
 

@@ -19,16 +19,6 @@ object StepperDefaults {
      */
     val SmallCircleSize: Dp = 32.dp
 
-    /**
-     * Medium circle size for standard steppers (36dp)
-     */
-    val MediumCircleSize: Dp = 36.dp
-
-    /**
-     * Large circle size for prominent steppers (40dp)
-     */
-    val LargeCircleSize: Dp = 40.dp
-
     // Typography
     /**
      * Font size for numbers/icons inside circles (16sp)

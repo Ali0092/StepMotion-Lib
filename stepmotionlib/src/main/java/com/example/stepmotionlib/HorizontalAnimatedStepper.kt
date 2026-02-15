@@ -72,7 +72,7 @@ fun HorizontalAnimatedStepper(
     activeTitleColor: Color,
     inactiveTitleColor: Color,
     modifier: Modifier = Modifier,
-    circleSize: Dp = StepperDefaults.LargeCircleSize,
+    circleSize: Dp = StepperDefaults.SmallCircleSize,
     circleFontSize: TextUnit = StepperDefaults.CircleNumberFontSize,
     titleFontSize: TextUnit = StepperDefaults.SmallTitleFontSize,
     spacing: Dp = StepperDefaults.MediumSpacing,
