@@ -124,8 +124,8 @@ fun HorizontalAnimatedStepper(
                 AnimatedConnectorLine(
                     modifier = Modifier
                         .weight(1f)
-                        .align(Alignment.CenterVertically)
-                        .padding(horizontal = 2.dp),
+                        .align(Alignment.Top)
+                        .padding(top = circleSize / 2 - connectorThickness / 2, start = 2.dp, end = 2.dp),
                     isCompleted = index < currentStep,
                     activeColor = activeColor,
                     inactiveColor = inactiveColor,

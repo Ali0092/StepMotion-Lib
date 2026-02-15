@@ -138,8 +138,8 @@ fun HorizontalSimpleStepper(
                 ConnectorLine(
                     modifier = Modifier
                         .weight(1f)
-                        .align(Alignment.CenterVertically)
-                        .padding(horizontal = 4.dp),
+                        .align(Alignment.Top)
+                        .padding(top = circleSize / 2 - connectorThickness / 2, start = 4.dp, end = 4.dp),
                     isPrevious = index < actualCurrentStep,
                     isCurrent = index == actualCurrentStep,
                     activeColor = actualActiveColor,
