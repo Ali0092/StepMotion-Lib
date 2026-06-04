@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +34,7 @@ import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.stepmotion.ui.theme.StepMotionTheme
@@ -80,10 +82,12 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(bottom = 28.dp)
                     )
 
-                    // 1. Horizontal Simple Stepper — Default Configuration
+                    // ── Simple Stepper ────────────────────────────────────
+                    TypeHeader("Simple Stepper")
+
                     StepperSection(
-                        title = "Horizontal Simple - Default",
-                        subtitle = "Clean & minimal step indicator with new API",
+                        title = "Horizontal — Default",
+                        subtitle = "Clean & minimal circles with animated connector",
                         accentColor = Color(0xFF3B82F6),
                         stepCount = 5,
                     ) { selectedIndex ->
@@ -100,9 +104,8 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 2. Horizontal Simple Stepper — Large & Custom
                     StepperSection(
-                        title = "Horizontal Simple - Large Custom",
+                        title = "Horizontal — Large Custom",
                         subtitle = "Larger circles, custom spacing & thick connectors",
                         accentColor = Color(0xFF8B5CF6),
                         stepCount = 3,
@@ -115,7 +118,6 @@ class MainActivity : ComponentActivity() {
                             inactiveColor = Color(0xFFCBD5E1),
                             activeTitleColor = Color(0xFF6B21A8),
                             inactiveTitleColor = Color(0xFF94A3B8),
-                            // Custom sizes
                             circleSize = 42.dp,
                             titleFontSize = 16.sp,
                             spacing = 8.dp,
@@ -125,9 +127,55 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 3. Horizontal Animated Stepper — Default
                     StepperSection(
-                        title = "Horizontal Animated - Default",
+                        title = "Vertical — Default",
+                        subtitle = "Classic vertical timeline layout",
+                        accentColor = Color(0xFFF59E0B),
+                        stepCount = 5,
+                    ) { selectedIndex ->
+                        VerticalSimpleStepper(
+                            modifier = Modifier.fillMaxWidth().height(280.dp),
+                            steps = listOf(
+                                "Select Service", "Choose Provider",
+                                "Pick Date & Time", "Confirm Details", "Booking Complete"
+                            ),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFFF59E0B),
+                            inactiveColor = Color(0xFFE2E8F0),
+                            activeTitleColor = Color(0xFF92400E),
+                            inactiveTitleColor = Color(0xFF94A3B8)
+                        )
+                    }
+
+                    SectionDivider()
+
+                    StepperSection(
+                        title = "Vertical — Large & Spacious",
+                        subtitle = "Bigger circles, larger fonts, more spacing",
+                        accentColor = Color(0xFF06B6D4),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        VerticalSimpleStepper(
+                            modifier = Modifier.fillMaxWidth().height(320.dp),
+                            steps = listOf("Design", "Develop", "Test", "Deploy"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFF06B6D4),
+                            inactiveColor = Color(0xFFE2E8F0),
+                            activeTitleColor = Color(0xFF164E63),
+                            inactiveTitleColor = Color(0xFF94A3B8),
+                            circleSize = 44.dp,
+                            circleFontSize = 20.sp,
+                            titleFontSize = 18.sp,
+                            verticalSpacing = 8.dp,
+                            connectorThickness = 3.dp
+                        )
+                    }
+
+                    // ── Animated Stepper ──────────────────────────────────
+                    TypeHeader("Animated Stepper")
+
+                    StepperSection(
+                        title = "Horizontal — Default",
                         subtitle = "Pulse ring, bouncy checkmarks & progress fill",
                         accentColor = Color(0xFF10B981),
                         stepCount = 5,
@@ -145,9 +193,8 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 4. Horizontal Animated Stepper — Custom Fast Animation
                     StepperSection(
-                        title = "Horizontal Animated - Fast & Compact",
+                        title = "Horizontal — Fast & Compact",
                         subtitle = "Smaller circles, faster animations, no pulse",
                         accentColor = Color(0xFFEF4444),
                         stepCount = 4,
@@ -160,7 +207,6 @@ class MainActivity : ComponentActivity() {
                             inactiveColor = Color(0xFFCBD5E1),
                             activeTitleColor = Color(0xFF991B1B),
                             inactiveTitleColor = Color(0xFF94A3B8),
-                            // Custom configuration
                             circleSize = 32.dp,
                             titleFontSize = 11.sp,
                             spacing = 4.dp,
@@ -169,84 +215,20 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    SectionDivider()
+                    // ── Card Stepper ──────────────────────────────────────
+                    TypeHeader("Card Stepper")
 
-                    // 5. Vertical Simple Stepper — Default
                     StepperSection(
-                        title = "Vertical Simple - Default",
-                        subtitle = "Classic vertical timeline layout",
-                        accentColor = Color(0xFFF59E0B),
-                        stepCount = 5,
-                    ) { selectedIndex ->
-                        VerticalSimpleStepper(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(280.dp),
-                            steps = listOf(
-                                "Select Service",
-                                "Choose Provider",
-                                "Pick Date & Time",
-                                "Confirm Details",
-                                "Booking Complete",
-                            ),
-                            currentStep = selectedIndex,
-                            activeColor = Color(0xFFF59E0B),
-                            inactiveColor = Color(0xFFE2E8F0),
-                            activeTitleColor = Color(0xFF92400E),
-                            inactiveTitleColor = Color(0xFF94A3B8)
-                        )
-                    }
-
-                    SectionDivider()
-
-                    // 6. Vertical Simple Stepper — Large & Spacious
-                    StepperSection(
-                        title = "Vertical Simple - Large & Spacious",
-                        subtitle = "Bigger circles, larger fonts, more spacing",
-                        accentColor = Color(0xFF06B6D4),
-                        stepCount = 4,
-                    ) { selectedIndex ->
-                        VerticalSimpleStepper(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(320.dp),
-                            steps = listOf(
-                                "Design",
-                                "Develop",
-                                "Test",
-                                "Deploy",
-                            ),
-                            currentStep = selectedIndex,
-                            activeColor = Color(0xFF06B6D4),
-                            inactiveColor = Color(0xFFE2E8F0),
-                            activeTitleColor = Color(0xFF164E63),
-                            inactiveTitleColor = Color(0xFF94A3B8),
-                            // Custom sizes
-                            circleSize = 44.dp,
-                            circleFontSize = 20.sp,
-                            titleFontSize = 18.sp,
-                            verticalSpacing = 8.dp,
-                            connectorThickness = 3.dp
-                        )
-                    }
-
-                    SectionDivider()
-
-                    // 7. Vertical Card Stepper — Default
-                    StepperSection(
-                        title = "Vertical Card - Default",
-                        subtitle = "Cards with expand, crossfade & accent border",
+                        title = "Vertical — Default",
+                        subtitle = "Expandable cards with crossfade & accent border",
                         accentColor = Color(0xFF8B5CF6),
                         stepCount = 5,
                     ) { selectedIndex ->
                         VerticalCardStepper(
                             modifier = Modifier.fillMaxWidth(),
                             steps = listOf(
-                                "Create Account",
-                                "Personal Info",
-                                "Preferences",
-                                "Verification",
-                                "All Set!",
+                                "Create Account", "Personal Info",
+                                "Preferences", "Verification", "All Set!"
                             ),
                             descriptions = listOf(
                                 "Sign up with your email and create a password",
@@ -265,20 +247,15 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 8. Vertical Card Stepper — Custom Compact Style
                     StepperSection(
-                        title = "Vertical Card - Compact Custom",
+                        title = "Vertical — Compact Custom",
                         subtitle = "Smaller cards, tight spacing, custom styling",
                         accentColor = Color(0xFFEC4899),
                         stepCount = 3,
                     ) { selectedIndex ->
                         VerticalCardStepper(
                             modifier = Modifier.fillMaxWidth(),
-                            steps = listOf(
-                                "Upload",
-                                "Process",
-                                "Complete",
-                            ),
+                            steps = listOf("Upload", "Process", "Complete"),
                             descriptions = listOf(
                                 "Select and upload your files",
                                 "Processing your documents",
@@ -289,7 +266,6 @@ class MainActivity : ComponentActivity() {
                             inactiveColor = Color(0xFF94A3B8),
                             activeCardBackgroundColor = Color(0xFFFDF2F8),
                             cardBackgroundColor = Color(0xFFFFFFFF),
-                            // Custom styling
                             circleSize = 32.dp,
                             circleFontSize = 14.sp,
                             titleFontSize = 14.sp,
@@ -302,12 +278,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    SectionDivider()
+                    // ── Numbered Stepper ──────────────────────────────────
+                    TypeHeader("Numbered Stepper")
 
-                    // 9. Horizontal Numbered Stepper — Default (NFT/flow style)
                     StepperSection(
-                        title = "Horizontal Numbered - Default",
-                        subtitle = "Outlined inactive circles, filled active, outer ring on current",
+                        title = "Horizontal — Default",
+                        subtitle = "Outlined inactive, filled active, outer ring on current",
                         accentColor = Color(0xFF7C3AED),
                         stepCount = 4,
                     ) { selectedIndex ->
@@ -324,17 +300,14 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 10. Vertical Numbered Stepper — Default
                     StepperSection(
-                        title = "Vertical Numbered - Default",
+                        title = "Vertical — Default",
                         subtitle = "Outlined inactive circles with outer ring on current step",
                         accentColor = Color(0xFF0EA5E9),
                         stepCount = 4,
                     ) { selectedIndex ->
                         VerticalNumberedStepper(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(240.dp),
+                            modifier = Modifier.fillMaxWidth().height(240.dp),
                             steps = listOf("Setup", "Configure", "Preview", "Launch"),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFF0EA5E9),
@@ -344,12 +317,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    SectionDivider()
+                    // ── Icon Stepper ──────────────────────────────────────
+                    TypeHeader("Icon Stepper")
 
-                    // 11. Horizontal Icon Stepper — Custom icons per step
                     StepperSection(
-                        title = "Horizontal Icon - Custom Icons",
-                        subtitle = "Per-step icons: outlined when inactive, white when active",
+                        title = "Horizontal — Custom Icons",
+                        subtitle = "Per-step icons: outlined inactive, white when active",
                         accentColor = Color(0xFFF59E0B),
                         stepCount = 4,
                     ) { selectedIndex ->
@@ -357,10 +330,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxWidth(),
                             steps = listOf("Profile", "Home", "Cart", "Done"),
                             icons = listOf(
-                                Icons.Rounded.Person,
-                                Icons.Rounded.Home,
-                                Icons.Rounded.ShoppingCart,
-                                Icons.Rounded.Star
+                                Icons.Rounded.Person, Icons.Rounded.Home,
+                                Icons.Rounded.ShoppingCart, Icons.Rounded.Star
                             ),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFFF59E0B),
@@ -372,23 +343,18 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 12. Vertical Icon Stepper — Custom icons per step
                     StepperSection(
-                        title = "Vertical Icon - Custom Icons",
+                        title = "Vertical — Custom Icons",
                         subtitle = "Vertical layout with per-step icons",
                         accentColor = Color(0xFFEC4899),
                         stepCount = 4,
                     ) { selectedIndex ->
                         VerticalIconStepper(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(240.dp),
+                            modifier = Modifier.fillMaxWidth().height(240.dp),
                             steps = listOf("Account", "Address", "Wishlist", "Favourites"),
                             icons = listOf(
-                                Icons.Rounded.Person,
-                                Icons.Rounded.Home,
-                                Icons.Rounded.Star,
-                                Icons.Rounded.Favorite
+                                Icons.Rounded.Person, Icons.Rounded.Home,
+                                Icons.Rounded.Star, Icons.Rounded.Favorite
                             ),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFFEC4899),
@@ -398,11 +364,11 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    SectionDivider()
+                    // ── Rounded Stepper ───────────────────────────────────
+                    TypeHeader("Rounded Stepper")
 
-                    // 13. Horizontal Rounded Stepper — Nightingale style
                     StepperSection(
-                        title = "Horizontal Rounded - Badge Style",
+                        title = "Horizontal — Badge Style",
                         subtitle = "Rounded-rectangle badges, not fully rounded corners",
                         accentColor = Color(0xFF10B981),
                         stepCount = 4,
@@ -421,17 +387,14 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 14. Vertical Rounded Stepper — Nightingale style
                     StepperSection(
-                        title = "Vertical Rounded - Badge Style",
-                        subtitle = "Vertical layout with softly-cornered rectangular badges",
+                        title = "Vertical — Badge Style",
+                        subtitle = "Softly-cornered rectangular badges in vertical layout",
                         accentColor = Color(0xFF6366F1),
                         stepCount = 4,
                     ) { selectedIndex ->
                         VerticalRoundedStepper(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(260.dp),
+                            modifier = Modifier.fillMaxWidth().height(260.dp),
                             steps = listOf("Intake", "Diagnosis", "Prescription", "Follow-up"),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFF6366F1),
@@ -442,12 +405,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    SectionDivider()
+                    // ── Progress Bar Stepper ──────────────────────────────
+                    TypeHeader("Progress Bar Stepper")
 
-                    // 15. Horizontal Progress Bar Stepper
                     StepperSection(
-                        title = "Horizontal Progress Bar",
-                        subtitle = "Continuous bar with dots on top, half-fill on current step",
+                        title = "Horizontal — Default",
+                        subtitle = "Continuous bar with dots on top, half-fill on current",
                         accentColor = Color(0xFFEF4444),
                         stepCount = 5,
                     ) { selectedIndex ->
@@ -465,18 +428,18 @@ class MainActivity : ComponentActivity() {
 
                     SectionDivider()
 
-                    // 16. Vertical Progress Bar Stepper
                     StepperSection(
-                        title = "Vertical Progress Bar",
-                        subtitle = "Vertical continuous bar with dots, labels to the right",
+                        title = "Vertical — Default",
+                        subtitle = "Vertical bar with dots, labels to the right",
                         accentColor = Color(0xFF14B8A6),
                         stepCount = 5,
                     ) { selectedIndex ->
                         VerticalProgressBarStepper(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(300.dp),
-                            steps = listOf("Order placed", "Processing", "Shipped", "Out for delivery", "Delivered"),
+                            modifier = Modifier.fillMaxWidth().height(300.dp),
+                            steps = listOf(
+                                "Order placed", "Processing",
+                                "Shipped", "Out for delivery", "Delivered"
+                            ),
                             currentStep = selectedIndex,
                             activeColor = Color(0xFF14B8A6),
                             inactiveColor = Color(0xFFCBD5E1),
@@ -490,6 +453,28 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun TypeHeader(name: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 24.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE2E8F0))
+        Text(
+            text = name.uppercase(),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF64748B),
+            textAlign = TextAlign.Center,
+            letterSpacing = 1.5.sp
+        )
+        HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE2E8F0))
     }
 }
 
