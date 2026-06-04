@@ -1,4 +1,4 @@
-package com.example.stepmotionlib
+package com.example.stepmotionlib.horizontal_steppers
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -41,7 +41,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.stepmotionlib.StepperDefaults
 import kotlinx.coroutines.launch
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * A horizontal animated stepper component with pulse effects on the current step.
@@ -155,7 +157,7 @@ private fun AnimatedStepIndicator(
             else -> inactiveColor.copy(alpha = 0.3f)
         },
         animationSpec = tween(animationDuration),
-        label = "indicatorBg"
+        label = "indicatorBackground"
     )
 
     val scale by animateFloatAsState(
@@ -319,4 +321,51 @@ private fun AnimatedConnectorLine(
             )
         }
     }
+}
+
+
+//********************************//
+//            PREVIEW            //
+//******************************//
+
+@Preview(name = "HorizontalAnimated – Step 1", showBackground = true, widthDp = 360)
+@Composable
+private fun HorizontalAnimatedPreview_Step1() {
+    HorizontalAnimatedStepper(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        steps = listOf("Cart", "Shipping", "Payment", "Done"),
+        currentStep = 0,
+        activeColor = Color(0xFF10B981),
+        inactiveColor = Color(0xFFCBD5E1),
+        activeTitleColor = Color(0xFF065F46),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
+}
+
+@Preview(name = "HorizontalAnimated – Step 2", showBackground = true, widthDp = 360)
+@Composable
+private fun HorizontalAnimatedPreview_Step2() {
+    HorizontalAnimatedStepper(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        steps = listOf("Cart", "Shipping", "Payment", "Done"),
+        currentStep = 2,
+        activeColor = Color(0xFF10B981),
+        inactiveColor = Color(0xFFCBD5E1),
+        activeTitleColor = Color(0xFF065F46),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
+}
+
+@Preview(name = "HorizontalAnimated – Complete", showBackground = true, widthDp = 360)
+@Composable
+private fun HorizontalAnimatedPreview_Complete() {
+    HorizontalAnimatedStepper(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        steps = listOf("Cart", "Shipping", "Payment", "Done"),
+        currentStep = 3,
+        activeColor = Color(0xFF10B981),
+        inactiveColor = Color(0xFFCBD5E1),
+        activeTitleColor = Color(0xFF065F46),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
 }

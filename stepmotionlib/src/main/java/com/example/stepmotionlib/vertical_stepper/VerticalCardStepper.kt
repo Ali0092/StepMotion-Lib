@@ -1,4 +1,4 @@
-package com.example.stepmotionlib
+package com.example.stepmotionlib.vertical_stepper
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
@@ -45,6 +45,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.stepmotionlib.StepperDefaults
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * A vertical card stepper component that displays steps with circle indicators and expandable cards.
@@ -352,4 +354,63 @@ private fun StepCard(
             }
         }
     }
+}
+
+
+
+//********************************//
+//            PREVIEW            //
+//******************************//
+
+private val cardSteps = listOf("Create Account", "Personal Info", "Verify", "All Set!")
+private val cardDescs = listOf(
+    "Sign up with your email",
+    "Tell us your name and details",
+    "Verify your email address",
+    "Your account is ready"
+)
+
+@Preview(name = "VerticalCard – Step 1", showBackground = true, widthDp = 360)
+@Composable
+private fun VerticalCardPreview_Step1() {
+    VerticalCardStepper(
+        modifier = Modifier.fillMaxWidth(),
+        steps = cardSteps,
+        descriptions = cardDescs,
+        currentStep = 0,
+        activeColor = Color(0xFF8B5CF6),
+        inactiveColor = Color(0xFF94A3B8),
+        activeCardBackgroundColor = Color(0xFFF5F3FF),
+        cardBackgroundColor = Color(0xFFFFFFFF)
+    )
+}
+
+@Preview(name = "VerticalCard – Step 2", showBackground = true, widthDp = 360)
+@Composable
+private fun VerticalCardPreview_Step2() {
+    VerticalCardStepper(
+        modifier = Modifier.fillMaxWidth(),
+        steps = cardSteps,
+        descriptions = cardDescs,
+        currentStep = 2,
+        activeColor = Color(0xFF8B5CF6),
+        inactiveColor = Color(0xFF94A3B8),
+        activeCardBackgroundColor = Color(0xFFF5F3FF),
+        cardBackgroundColor = Color(0xFFFFFFFF)
+    )
+}
+
+@Preview(name = "VerticalCard – Complete", showBackground = true, widthDp = 360)
+@Composable
+private fun VerticalCardPreview_Complete() {
+    VerticalCardStepper(
+        modifier = Modifier.fillMaxWidth(),
+        steps = cardSteps,
+        descriptions = cardDescs,
+        currentStep = 3,
+        activeColor = Color(0xFF8B5CF6),
+        inactiveColor = Color(0xFF94A3B8),
+        activeCardBackgroundColor = Color(0xFFF5F3FF),
+        cardBackgroundColor = Color(0xFFFFFFFF)
+    )
 }

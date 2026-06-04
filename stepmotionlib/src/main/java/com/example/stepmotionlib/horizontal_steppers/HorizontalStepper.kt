@@ -1,4 +1,4 @@
-package com.example.stepmotionlib
+package com.example.stepmotionlib.horizontal_steppers
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
@@ -43,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.stepmotionlib.StepperDefaults
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * A horizontal stepper component that displays steps with circle indicators and text labels.
@@ -64,14 +66,14 @@ import androidx.compose.ui.unit.dp
  * @param animationDuration Duration of color and scale animations in milliseconds
  */
 @Composable
-fun HorizontalSimpleStepper(
+fun HorizontalStepper(
+    modifier: Modifier = Modifier,
     steps: List<String>,
     currentStep: Int,
     activeColor: Color,
     inactiveColor: Color,
     activeTitleColor: Color,
     inactiveTitleColor: Color,
-    modifier: Modifier = Modifier,
     circleSize: Dp = StepperDefaults.SmallCircleSize,
     circleFontSize: TextUnit = StepperDefaults.CircleNumberFontSize,
     titleFontSize: TextUnit = StepperDefaults.MediumTitleFontSize,
@@ -79,41 +81,23 @@ fun HorizontalSimpleStepper(
     connectorThickness: Dp = StepperDefaults.ThinConnector,
     borderWidth: Dp = StepperDefaults.BorderWidth,
     animationDuration: Int = StepperDefaults.ColorAnimationDuration,
-    // Legacy parameters for backward compatibility (prefer using new parameter names above)
-    titleList: List<String>? = null,
-    countingList: List<Int>? = null,
-    selectedItemIndex: Int? = null,
-    selectedItemColor: Color? = null,
-    nonSelectedItemColor: Color? = null,
-    selectedTitleColor: Color? = null,
-    nonSelectedTitleColor: Color? = null,
 ) {
-    // Handle backward compatibility
-    val actualSteps = titleList ?: steps
-    val actualCurrentStep = selectedItemIndex ?: currentStep
-    val actualActiveColor = selectedItemColor ?: activeColor
-    val actualInactiveColor = nonSelectedItemColor ?: inactiveColor
-    val actualActiveTitleColor = selectedTitleColor ?: activeTitleColor
-    val actualInactiveTitleColor = nonSelectedTitleColor ?: inactiveTitleColor
-
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
     ) {
-        actualSteps.forEachIndexed { index, title ->
-            // Column containing circle and text, centered
+        steps.forEachIndexed { index, title ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.wrapContentWidth()
             ) {
-                // Circle indicator
                 StepIndicator(
                     stepNumber = (index + 1).toString(),
-                    isPrevious = index < actualCurrentStep,
-                    isCurrent = index == actualCurrentStep,
-                    isNext = index > actualCurrentStep,
-                    activeColor = actualActiveColor,
-                    inactiveColor = actualInactiveColor,
+                    isPrevious = index < currentStep,
+                    isCurrent = index == currentStep,
+                    isNext = index > currentStep,
+                    activeColor = activeColor,
+                    inactiveColor = inactiveColor,
                     circleSize = circleSize,
                     circleFontSize = circleFontSize,
                     borderWidth = borderWidth,
@@ -122,28 +106,26 @@ fun HorizontalSimpleStepper(
 
                 Spacer(modifier = Modifier.height(spacing))
 
-                // Text label
                 StepLabel(
                     title = title,
-                    isActive = index <= actualCurrentStep,
-                    activeColor = actualActiveTitleColor,
-                    inactiveColor = actualInactiveTitleColor,
+                    isActive = index <= currentStep,
+                    activeColor = activeTitleColor,
+                    inactiveColor = inactiveTitleColor,
                     fontSize = titleFontSize,
                     animationDuration = animationDuration
                 )
             }
 
-            // Connector line (only for non-last items)
-            if (index < actualSteps.lastIndex) {
+            if (index < steps.lastIndex) {
                 ConnectorLine(
                     modifier = Modifier
                         .weight(1f)
                         .align(Alignment.Top)
                         .padding(top = circleSize / 2 - connectorThickness / 2, start = 4.dp, end = 4.dp),
-                    isPrevious = index < actualCurrentStep,
-                    isCurrent = index == actualCurrentStep,
-                    activeColor = actualActiveColor,
-                    inactiveColor = actualInactiveColor,
+                    isPrevious = index < currentStep,
+                    isCurrent = index == currentStep,
+                    activeColor = activeColor,
+                    inactiveColor = inactiveColor,
                     thickness = connectorThickness
                 )
             }
@@ -301,4 +283,50 @@ private fun ConnectorLine(
             )
         }
     }
+}
+
+//********************************//
+//            PREVIEW            //
+//******************************//
+
+@Preview(name = "HorizontalSimple – Step 1", showBackground = true, widthDp = 360)
+@Composable
+private fun HorizontalSimplePreview_Step1() {
+    HorizontalStepper(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        steps = listOf("Details", "Address", "Payment", "Done"),
+        currentStep = 0,
+        activeColor = Color(0xFF3B82F6),
+        inactiveColor = Color(0xFFCBD5E1),
+        activeTitleColor = Color(0xFF1E40AF),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
+}
+
+@Preview(name = "HorizontalSimple – Step 2", showBackground = true, widthDp = 360)
+@Composable
+private fun HorizontalSimplePreview_Step2() {
+    HorizontalStepper(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        steps = listOf("Details", "Address", "Payment", "Done"),
+        currentStep = 1,
+        activeColor = Color(0xFF3B82F6),
+        inactiveColor = Color(0xFFCBD5E1),
+        activeTitleColor = Color(0xFF1E40AF),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
+}
+
+@Preview(name = "HorizontalSimple – Complete", showBackground = true, widthDp = 360)
+@Composable
+private fun HorizontalSimplePreview_Complete() {
+    HorizontalStepper(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        steps = listOf("Details", "Address", "Payment", "Done"),
+        currentStep = 3,
+        activeColor = Color(0xFF3B82F6),
+        inactiveColor = Color(0xFFCBD5E1),
+        activeTitleColor = Color(0xFF1E40AF),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
 }

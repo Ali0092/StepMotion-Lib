@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.ali0092"
-version = "1.0.4"
+version = "1.0.5"
 
 android {
     namespace = "com.example.stepmotionlib"
@@ -57,5 +57,6 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.material.icons.extended)
 }
