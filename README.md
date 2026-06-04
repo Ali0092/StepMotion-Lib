@@ -47,7 +47,7 @@ Add the dependency in your module's `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation 'com.github.Ali0092:StepMotion-Lib:v1.0.4'
+    implementation 'com.github.Ali0092:StepMotion-Lib:v1.0.5'
 }
 ```
 
