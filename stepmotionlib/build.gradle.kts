@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.ali0092"
-version = "1.0.4"
+version = "1.0.5"
 
 android {
     namespace = "com.example.stepmotionlib"
