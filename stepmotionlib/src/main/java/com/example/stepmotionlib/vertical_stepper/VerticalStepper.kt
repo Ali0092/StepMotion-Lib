@@ -1,4 +1,5 @@
-package com.example.stepmotionlib
+
+package com.example.stepmotionlib.vertical_stepper
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
@@ -42,6 +43,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.stepmotionlib.StepperDefaults
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.height
 
 /**
  * A vertical stepper component that displays steps with circle indicators and text labels.
@@ -80,67 +84,49 @@ fun VerticalSimpleStepper(
     connectorThickness: Dp = StepperDefaults.ThinConnector,
     borderWidth: Dp = StepperDefaults.BorderWidth,
     animationDuration: Int = StepperDefaults.ColorAnimationDuration,
-    // Legacy parameters for backward compatibility (prefer using new parameter names above)
-    titleList: List<String>? = null,
-    countingList: List<Int>? = null,
-    selectedItemIndex: Int? = null,
-    selectedItemColor: Color? = null,
-    nonSelectedItemColor: Color? = null,
-    selectedTitleColor: Color? = null,
-    nonSelectedTitleColor: Color? = null,
 ) {
-    // Handle backward compatibility
-    val actualSteps = titleList ?: steps
-    val actualCurrentStep = selectedItemIndex ?: currentStep
-    val actualActiveColor = selectedItemColor ?: activeColor
-    val actualInactiveColor = nonSelectedItemColor ?: inactiveColor
-    val actualActiveTitleColor = selectedTitleColor ?: activeTitleColor
-    val actualInactiveTitleColor = nonSelectedTitleColor ?: inactiveTitleColor
-
     Row(
         modifier = modifier.fillMaxWidth()
     ) {
-        // Left column: Circles and connectors
         Column(
             modifier = Modifier.padding(horizontal = horizontalSpacing),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            actualSteps.forEachIndexed { index, _ ->
+            steps.forEachIndexed { index, _ ->
                 VerticalStepIndicator(
                     stepNumber = (index + 1).toString(),
-                    isPrevious = index < actualCurrentStep,
-                    isCurrent = index == actualCurrentStep,
-                    isNext = index > actualCurrentStep,
-                    isEndNode = index == actualSteps.lastIndex,
-                    activeColor = actualActiveColor,
-                    inactiveColor = actualInactiveColor,
+                    isPrevious = index < currentStep,
+                    isCurrent = index == currentStep,
+                    isNext = index > currentStep,
+                    isEndNode = index == steps.lastIndex,
+                    activeColor = activeColor,
+                    inactiveColor = inactiveColor,
                     circleSize = circleSize,
                     circleFontSize = circleFontSize,
                     verticalSpacing = verticalSpacing,
                     connectorThickness = connectorThickness,
                     borderWidth = borderWidth,
                     animationDuration = animationDuration,
-                    modifier = if (index == actualSteps.lastIndex) Modifier else Modifier.weight(1f)
+                    modifier = if (index == steps.lastIndex) Modifier else Modifier.weight(1f)
                 )
             }
         }
 
-        // Right column: Text labels
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         ) {
-            actualSteps.forEachIndexed { index, title ->
+            steps.forEachIndexed { index, title ->
                 VerticalStepLabel(
                     title = title,
-                    isActive = index <= actualCurrentStep,
-                    activeColor = actualActiveTitleColor,
-                    inactiveColor = actualInactiveTitleColor,
+                    isActive = index <= currentStep,
+                    activeColor = activeTitleColor,
+                    inactiveColor = inactiveTitleColor,
                     fontSize = titleFontSize,
-                    isEndNode = index == actualSteps.lastIndex,
+                    isEndNode = index == steps.lastIndex,
                     animationDuration = animationDuration,
-                    modifier = if (index == actualSteps.lastIndex) Modifier else Modifier.weight(1f)
+                    modifier = if (index == steps.lastIndex) Modifier else Modifier.weight(1f)
                 )
             }
         }
@@ -320,4 +306,51 @@ private fun VerticalStepLabel(
             Spacer(modifier = Modifier.weight(1f))
         }
     }
+}
+
+
+//********************************//
+//            PREVIEW            //
+//******************************//
+
+@Preview(name = "VerticalSimple – Step 1", showBackground = true, widthDp = 360, heightDp = 260)
+@Composable
+private fun VerticalSimplePreview_Step1() {
+    VerticalSimpleStepper(
+        modifier = Modifier.fillMaxWidth().height(240.dp),
+        steps = listOf("Select", "Confirm", "Pay", "Complete"),
+        currentStep = 0,
+        activeColor = Color(0xFFF59E0B),
+        inactiveColor = Color(0xFFE2E8F0),
+        activeTitleColor = Color(0xFF92400E),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
+}
+
+@Preview(name = "VerticalSimple – Step 2", showBackground = true, widthDp = 360, heightDp = 260)
+@Composable
+private fun VerticalSimplePreview_Step2() {
+    VerticalSimpleStepper(
+        modifier = Modifier.fillMaxWidth().height(240.dp),
+        steps = listOf("Select", "Confirm", "Pay", "Complete"),
+        currentStep = 2,
+        activeColor = Color(0xFFF59E0B),
+        inactiveColor = Color(0xFFE2E8F0),
+        activeTitleColor = Color(0xFF92400E),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
+}
+
+@Preview(name = "VerticalSimple – Complete", showBackground = true, widthDp = 360, heightDp = 260)
+@Composable
+private fun VerticalSimplePreview_Complete() {
+    VerticalSimpleStepper(
+        modifier = Modifier.fillMaxWidth().height(240.dp),
+        steps = listOf("Select", "Confirm", "Pay", "Complete"),
+        currentStep = 3,
+        activeColor = Color(0xFFF59E0B),
+        inactiveColor = Color(0xFFE2E8F0),
+        activeTitleColor = Color(0xFF92400E),
+        inactiveTitleColor = Color(0xFF94A3B8)
+    )
 }

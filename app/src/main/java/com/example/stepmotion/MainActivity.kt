@@ -25,16 +25,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.ShoppingCart
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.stepmotion.ui.theme.StepMotionTheme
-import com.example.stepmotionlib.HorizontalAnimatedStepper
-import com.example.stepmotionlib.HorizontalSimpleStepper
-import com.example.stepmotionlib.VerticalCardStepper
-import com.example.stepmotionlib.VerticalSimpleStepper
+import com.example.stepmotionlib.horizontal_steppers.HorizontalAnimatedStepper
+import com.example.stepmotionlib.horizontal_steppers.HorizontalIconStepper
+import com.example.stepmotionlib.horizontal_steppers.HorizontalNumberedStepper
+import com.example.stepmotionlib.horizontal_steppers.HorizontalProgressBarStepper
+import com.example.stepmotionlib.horizontal_steppers.HorizontalRoundedStepper
+import com.example.stepmotionlib.horizontal_steppers.HorizontalStepper
+import com.example.stepmotionlib.vertical_stepper.VerticalCardStepper
+import com.example.stepmotionlib.vertical_stepper.VerticalIconStepper
+import com.example.stepmotionlib.vertical_stepper.VerticalNumberedStepper
+import com.example.stepmotionlib.vertical_stepper.VerticalProgressBarStepper
+import com.example.stepmotionlib.vertical_stepper.VerticalRoundedStepper
+import com.example.stepmotionlib.vertical_stepper.VerticalSimpleStepper
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +87,7 @@ class MainActivity : ComponentActivity() {
                         accentColor = Color(0xFF3B82F6),
                         stepCount = 5,
                     ) { selectedIndex ->
-                        HorizontalSimpleStepper(
+                        HorizontalStepper(
                             modifier = Modifier.fillMaxWidth(),
                             steps = listOf("Details", "Address", "Payment", "Review", "Done"),
                             currentStep = selectedIndex,
@@ -94,7 +107,7 @@ class MainActivity : ComponentActivity() {
                         accentColor = Color(0xFF8B5CF6),
                         stepCount = 3,
                     ) { selectedIndex ->
-                        HorizontalSimpleStepper(
+                        HorizontalStepper(
                             modifier = Modifier.fillMaxWidth(),
                             steps = listOf("Start", "Process", "Finish"),
                             currentStep = selectedIndex,
@@ -286,6 +299,190 @@ class MainActivity : ComponentActivity() {
                             cardSpacing = 6.dp,
                             connectorThickness = 2.dp,
                             accentBorderWidth = 3.dp
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 9. Horizontal Numbered Stepper — Default (NFT/flow style)
+                    StepperSection(
+                        title = "Horizontal Numbered - Default",
+                        subtitle = "Outlined inactive circles, filled active, outer ring on current",
+                        accentColor = Color(0xFF7C3AED),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        HorizontalNumberedStepper(
+                            modifier = Modifier.fillMaxWidth(),
+                            steps = listOf("Details", "Review", "Payment", "Confirm"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFF7C3AED),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF4C1D95),
+                            inactiveTitleColor = Color(0xFF94A3B8)
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 10. Vertical Numbered Stepper — Default
+                    StepperSection(
+                        title = "Vertical Numbered - Default",
+                        subtitle = "Outlined inactive circles with outer ring on current step",
+                        accentColor = Color(0xFF0EA5E9),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        VerticalNumberedStepper(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(240.dp),
+                            steps = listOf("Setup", "Configure", "Preview", "Launch"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFF0EA5E9),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF0C4A6E),
+                            inactiveTitleColor = Color(0xFF94A3B8)
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 11. Horizontal Icon Stepper — Custom icons per step
+                    StepperSection(
+                        title = "Horizontal Icon - Custom Icons",
+                        subtitle = "Per-step icons: outlined when inactive, white when active",
+                        accentColor = Color(0xFFF59E0B),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        HorizontalIconStepper(
+                            modifier = Modifier.fillMaxWidth(),
+                            steps = listOf("Profile", "Home", "Cart", "Done"),
+                            icons = listOf(
+                                Icons.Rounded.Person,
+                                Icons.Rounded.Home,
+                                Icons.Rounded.ShoppingCart,
+                                Icons.Rounded.Star
+                            ),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFFF59E0B),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF78350F),
+                            inactiveTitleColor = Color(0xFF94A3B8)
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 12. Vertical Icon Stepper — Custom icons per step
+                    StepperSection(
+                        title = "Vertical Icon - Custom Icons",
+                        subtitle = "Vertical layout with per-step icons",
+                        accentColor = Color(0xFFEC4899),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        VerticalIconStepper(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(240.dp),
+                            steps = listOf("Account", "Address", "Wishlist", "Favourites"),
+                            icons = listOf(
+                                Icons.Rounded.Person,
+                                Icons.Rounded.Home,
+                                Icons.Rounded.Star,
+                                Icons.Rounded.Favorite
+                            ),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFFEC4899),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF831843),
+                            inactiveTitleColor = Color(0xFF94A3B8)
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 13. Horizontal Rounded Stepper — Nightingale style
+                    StepperSection(
+                        title = "Horizontal Rounded - Badge Style",
+                        subtitle = "Rounded-rectangle badges, not fully rounded corners",
+                        accentColor = Color(0xFF10B981),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        HorizontalRoundedStepper(
+                            modifier = Modifier.fillMaxWidth(),
+                            steps = listOf("Symptoms", "History", "Rx", "Done"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFF10B981),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF064E3B),
+                            inactiveTitleColor = Color(0xFF94A3B8),
+                            cornerRadius = 10.dp
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 14. Vertical Rounded Stepper — Nightingale style
+                    StepperSection(
+                        title = "Vertical Rounded - Badge Style",
+                        subtitle = "Vertical layout with softly-cornered rectangular badges",
+                        accentColor = Color(0xFF6366F1),
+                        stepCount = 4,
+                    ) { selectedIndex ->
+                        VerticalRoundedStepper(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(260.dp),
+                            steps = listOf("Intake", "Diagnosis", "Prescription", "Follow-up"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFF6366F1),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF312E81),
+                            inactiveTitleColor = Color(0xFF94A3B8),
+                            cornerRadius = 10.dp
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 15. Horizontal Progress Bar Stepper
+                    StepperSection(
+                        title = "Horizontal Progress Bar",
+                        subtitle = "Continuous bar with dots on top, half-fill on current step",
+                        accentColor = Color(0xFFEF4444),
+                        stepCount = 5,
+                    ) { selectedIndex ->
+                        HorizontalProgressBarStepper(
+                            modifier = Modifier.fillMaxWidth(),
+                            steps = listOf("Start", "Design", "Build", "Test", "Ship"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFFEF4444),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF7F1D1D),
+                            inactiveTitleColor = Color(0xFF94A3B8),
+                            barThickness = 6.dp
+                        )
+                    }
+
+                    SectionDivider()
+
+                    // 16. Vertical Progress Bar Stepper
+                    StepperSection(
+                        title = "Vertical Progress Bar",
+                        subtitle = "Vertical continuous bar with dots, labels to the right",
+                        accentColor = Color(0xFF14B8A6),
+                        stepCount = 5,
+                    ) { selectedIndex ->
+                        VerticalProgressBarStepper(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp),
+                            steps = listOf("Order placed", "Processing", "Shipped", "Out for delivery", "Delivered"),
+                            currentStep = selectedIndex,
+                            activeColor = Color(0xFF14B8A6),
+                            inactiveColor = Color(0xFFCBD5E1),
+                            activeTitleColor = Color(0xFF134E4A),
+                            inactiveTitleColor = Color(0xFF94A3B8),
+                            barThickness = 6.dp
                         )
                     }
 
