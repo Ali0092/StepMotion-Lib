@@ -389,15 +389,20 @@ VerticalCardStepper(
 
 Feel free to fork, star, or suggest improvements via issues and pull requests.
 
-### Support This Project
+[//]: # (### Support This Project)
 
-If you find **StepMotion** helpful and would like to support the development, consider buying me a coffee! ☕
+[//]: # ()
+[//]: # (If you find **StepMotion** helpful and would like to support the development, consider buying me a coffee! ☕)
 
-<a href="https://buymeacoffee.com/ali0092" target="_blank">
-  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Buy Me A Coffee" />
-</a>
+[//]: # ()
+[//]: # (<a href="https://buymeacoffee.com/ali0092" target="_blank">)
 
-Your support helps me continue improving and maintaining this library. Thank you! 🙏
+[//]: # (  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Buy Me A Coffee" />)
+
+[//]: # (</a>)
+
+[//]: # ()
+[//]: # (Your support helps me continue improving and maintaining this library. Thank you! 🙏)
 
 ---
 
