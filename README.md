@@ -21,12 +21,9 @@
 <img width="30%" height="2400" alt="Screenshot_20260215_234011" src="https://github.com/user-attachments/assets/d269884e-5172-4019-a1d1-d09d5cf159d2" />
 <img width="30%" height="2400" alt="Screenshot_20260215_234040" src="https://github.com/user-attachments/assets/7ce15525-de28-4aa9-82a5-d955f6b46f1a" />
 <img width="30%" height="2400" alt="Screenshot_20260215_234100" src="https://github.com/user-attachments/assets/0ae5dd69-e1d3-4ad9-a83e-351ce285f979" />
-
 <img width="30%" height="2400" alt="Screenshot 2026-06-04 at 3 09 37 PM" src="https://github.com/user-attachments/assets/235cd7e5-ea06-4a79-a7b8-fce1fcfcad61" />
 <img width="30%" height="2400" alt="Screenshot 2026-06-04 at 3 10 47 PM" src="https://github.com/user-attachments/assets/b718385c-8a02-42d8-8fa3-df9572e77e61" />
-
 <img width="30%" height="2400" alt="Screenshot 2026-06-04 at 3 11 05 PM" src="https://github.com/user-attachments/assets/fd7aa447-7cf6-461a-95cc-7e9aaad33426" />
-
 <img width="30%" height="2400" alt="Screenshot 2026-06-04 at 3 11 35 PM" src="https://github.com/user-attachments/assets/b70e47ee-faf5-49e7-b4be-1ef57144a44c" />
 
 ---
@@ -392,6 +389,16 @@ VerticalCardStepper(
 
 Feel free to fork, star, or suggest improvements via issues and pull requests.
 
+### Support This Project
+
+If you find **StepMotion** helpful and would like to support the development, consider buying me a coffee! ☕
+
+<a href="https://buymeacoffee.com/ali0092" target="_blank">
+  <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=ali0092&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" alt="Buy Me A Coffee" />
+</a>
+
+Your support helps me continue improving and maintaining this library. Thank you! 🙏
+
 ---
 
 ## License
@@ -424,12 +431,31 @@ SOFTWARE.
 
 ## Author
 
-**Muhammad Ali**\
-📧 [aliatwork364@gmail.com](mailto:aliatwork364@gmail.com)\
-🌐 [Portfolio](https://muhammadali0092.netlify.app)\
-💼 [LinkedIn](https://www.linkedin.com/in/muhammad-ali-a28422222)\
-💻 [GitHub](https://github.com/Ali0092)
+<div align="center">
+
+### Muhammad Ali
+
+<a href="mailto:aliatwork364@gmail.com">
+  <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+</a>
+<a href="https://muhammadali0092.netlify.app" target="_blank">
+  <img src="https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=react&logoColor=61DAFB" alt="Portfolio" />
+</a>
+<a href="https://www.linkedin.com/in/muhammad-ali-a28422222" target="_blank">
+  <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+</a>
+<a href="https://github.com/Ali0092" target="_blank">
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+</a>
+
+</div>
 
 ---
 
+<div align="center">
+
+❤️ **Created with love by [Muhammad Ali](https://github.com/Ali0092)**
+
 > *"Step into motion — guide your users one smooth step at a time."*
+
+</div>
