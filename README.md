@@ -394,7 +394,7 @@ Feel free to fork, star, or suggest improvements via issues and pull requests.
 If you find **StepMotion** helpful and would like to support the development, consider buying me a coffee! ☕
 
 <a href="https://buymeacoffee.com/ali0092" target="_blank">
-  <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=ali0092&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" alt="Buy Me A Coffee" />
+  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Buy Me A Coffee" />
 </a>
 
 Your support helps me continue improving and maintaining this library. Thank you! 🙏
